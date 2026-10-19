@@ -1,6 +1,6 @@
 spring:
   application:
-    name: voxcode
+    name: jark
   main:
     allow-bean-definition-overriding: true
   profiles:
@@ -29,9 +29,12 @@ sandbox:
 docker:
   host: unix:///var/run/docker.sock
 
-voxcode:
+jark:
   security:
     jwt:
-      # A development-only fallback. Production must set VOXCODE_JWT_SECRET to a unique base64-encoded 256-bit key.
-      secret: ${VOXCODE_JWT_SECRET:dm94Y29kZS1kZXZlbG9wbWVudC1qd3Qtc2VjcmV0LTMya2V5}
-      expiration-seconds: ${VOXCODE_JWT_EXPIRATION_SECONDS:3600}
+      # A development-only fallback. Production must set JARK_JWT_SECRET to a unique base64-encoded 256-bit key.
+      secret: ${JARK_JWT_SECRET:dm94Y29kZS1kZXZlbG9wbWVudC1qd3Qtc2VjcmV0LTMya2V5}
+      expiration-seconds: ${JARK_JWT_EXPIRATION_SECONDS:3600}
+  mcp:
+    # Deliberately opt-in: this exposes the authenticated, read-only MCP endpoint at /mcp.
+    enabled: ${JARK_MCP_ENABLED:false}

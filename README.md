@@ -1,6 +1,6 @@
-# VoxCode — Agentic Java RAG Intelligence
+# Jark — Agentic Java RAG Intelligence
 
-VoxCode is an Agentic AI system for Java/Spring repository intelligence that uses AST analysis, dependency analysis, and RAG to investigate engineering problems, gather and validate evidence, create engineering plans, perform human-approved bounded remediation, and verify or roll back changes.
+Jark is an Agentic AI system for Java/Spring repository intelligence that uses AST analysis, dependency analysis, and RAG to investigate engineering problems, gather and validate evidence, create engineering plans, perform human-approved bounded remediation, and verify or roll back changes.
 
 **Core Principle:**
 Understand → Retrieve → Investigate → Prove → Plan → Act → Verify
@@ -10,7 +10,7 @@ Understand → Retrieve → Investigate → Prove → Plan → Act → Verify
 
 ## Architecture
 
-VoxCode follows a unified architecture:
+Jark follows a unified architecture:
 
 ```
 Repository → Repository Intelligence (AST + Dependency Graph + Repository Index) → Hybrid Repository-Aware RAG → One Adaptive Primary Agent → Evidence Engine → Finding Validation → Engineering Plan → Human Approval → Bounded Remediation → MCP/Tool Interface → Isolated Docker Workspace → Build + Tests + Static Analysis + Diff/Scope Validation → PASS (Accept) / FAIL (Bounded Repair) / FAIL after retry budget (Rollback) → Engineering Report → Evaluation
@@ -41,7 +41,7 @@ Repository → Repository Intelligence (AST + Dependency Graph + Repository Inde
 - **Testing:** JUnit 5, Mockito, Testcontainers
 
 **TIER 5 — OPTIONAL / ONLY IF TIME REMAINS**
-- **MCP:** Focused MCP server/interface exposing only useful VoxCode capabilities/tools (repository inspection, AST analysis, dependency analysis, retrieval, build, test, verification) - NOT a separate architecture or ecosystem
+- **MCP:** Focused MCP server/interface exposing only useful Jark capabilities/tools (repository inspection, AST analysis, dependency analysis, retrieval, build, test, verification) - NOT a separate architecture or ecosystem
 
 **EXCLUDED TECHNOLOGIES**
 - Redis, Kafka, Kubernetes, Microservices, Distributed service architecture, Complex caching, Complex messaging infrastructure, Custom distributed workflow engines, Huge MCP ecosystem, Multi-agent swarm architecture, Foundation-model training, Custom LLM, Generic multi-language support, Full IDE replacement, Unlimited autonomous coding, Complex voice infrastructure, Arbitrary feature generation
@@ -111,7 +111,7 @@ source setup-env.sh
 
 ## Project Scope
 
-VoxCode is a one-year solo project focused on building a deep, measurable, and defensible Agentic AI system for Java/Spring repositories.
+Jark is a one-year solo project focused on building a deep, measurable, and defensible Agentic AI system for Java/Spring repositories.
 
 **Primary Capabilities:**
 - Investigation: Repository intelligence and evidence-backed findings
@@ -137,7 +137,7 @@ VoxCode is a one-year solo project focused on building a deep, measurable, and d
 
 ## Development Workflow
 
-VoxCode follows a professional Git workflow:
+Jark follows a professional Git workflow:
 
 **Branching Strategy:**
 - `main` → stable/release-ready code
@@ -166,7 +166,7 @@ VoxCode follows a professional Git workflow:
 
 ## Documentation
 
-- **TODO.md** - Single source of truth for VoxCode specification and implementation tasks
+- **TODO.md** - Single source of truth for Jark specification and implementation tasks
 - **Docs/PRD.md** - Product Requirements Document (locked)
 - **Docs/Design doc.md** - UI/UX Design Document (locked)
 - **Docs/Tech doc.md** - Technical Design Document (locked)

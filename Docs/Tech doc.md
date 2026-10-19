@@ -1,15 +1,15 @@
-# VoxCode — Final Technical Design Document
+# Jark — Final Technical Design Document
 
 **Version:** 1.0
 **Status:** 🔒 Final / Locked
-**Product:** **VoxCode — Agentic Java/Spring Code Review & Remediation Agent**
+**Product:** **Jark — Agentic Java/Spring Code Review & Remediation Agent**
 **Primary Goal:** Build a technically strong Agentic AI portfolio project within one year, demonstrating **Java/Spring backend engineering, repository intelligence, RAG, agentic reasoning, tool calling, evidence validation, human approval, bounded remediation, verification, and evaluation** without unnecessary infrastructure or feature creep.
 
 ---
 
 # 1. Technical Vision
 
-VoxCode is a **Java/Spring-focused Agentic AI engineering system** that combines:
+Jark is a **Java/Spring-focused Agentic AI engineering system** that combines:
 
 ```text
 Deterministic Code Intelligence
@@ -37,7 +37,7 @@ The core technical philosophy is:
 
 The LLM should **not** be expected to understand an entire Java/Spring repository purely from raw source-code chunks.
 
-VoxCode therefore combines:
+Jark therefore combines:
 
 ```text
 AST        → Structure
@@ -53,7 +53,7 @@ Evaluation → Measurement
 
 # 2. Core Technical Identity
 
-VoxCode is **not primarily a code generator**.
+Jark is **not primarily a code generator**.
 
 It is:
 
@@ -62,7 +62,7 @@ It is:
 The technical hierarchy is:
 
 ```text
-                    VOXCODE
+                    JARK
                        │
         ┌──────────────┴──────────────┐
         │                             │
@@ -91,7 +91,7 @@ The most important engineering rule:
 ```text
                          ┌──────────────────────┐
                          │      React UI        │
-                         │   VoxCode Dashboard  │
+                         │   Jark Dashboard  │
                          └──────────┬───────────┘
                                     │
                               REST + SSE
@@ -171,7 +171,7 @@ The most important engineering rule:
 - **Testing:** JUnit 5, Mockito, Testcontainers
 
 **TIER 5 — OPTIONAL / ONLY IF TIME REMAINS**
-- **MCP:** Focused MCP server/interface exposing only useful VoxCode capabilities/tools (repository inspection, AST analysis, dependency analysis, retrieval, build, test, verification) - NOT a separate architecture or ecosystem
+- **MCP:** Focused MCP server/interface exposing only useful Jark capabilities/tools (repository inspection, AST analysis, dependency analysis, retrieval, build, test, verification) - NOT a separate architecture or ecosystem
 
 **EXCLUDED TECHNOLOGIES**
 - Redis, Kafka, Kubernetes, Microservices, Distributed service architecture, Complex caching, Complex messaging infrastructure, Custom distributed workflow engines, Huge MCP ecosystem, Multi-agent swarm architecture, Foundation-model training, Custom LLM, Generic multi-language support, Full IDE replacement, Unlimited autonomous coding, Complex voice infrastructure, Arbitrary feature generation
@@ -273,7 +273,7 @@ Used for isolated:
 * Tests
 * Verification
 
-VoxCode will **not** build its own container orchestration platform.
+Jark will **not** build its own container orchestration platform.
 
 ---
 
@@ -281,7 +281,7 @@ VoxCode will **not** build its own container orchestration platform.
 
 ## Modular Monolith
 
-VoxCode V1 should use a **modular Spring Boot monolith**.
+Jark V1 should use a **modular Spring Boot monolith**.
 
 ```text
 Spring Boot
@@ -305,7 +305,7 @@ Do **not** split these into microservices.
 
 ### Reason
 
-VoxCode needs to demonstrate:
+Jark needs to demonstrate:
 
 * Backend engineering
 * AI engineering
@@ -334,7 +334,7 @@ Lower Operational Complexity
 Recommended package structure:
 
 ```text
-com.voxcode
+com.jark
 │
 ├── repository
 │   ├── controller
@@ -442,7 +442,7 @@ Each layer answers different types of questions.
 
 > What does the repository's semantic/documentation context say?
 
-This separation is fundamental to VoxCode.
+This separation is fundamental to Jark.
 
 ### Intelligence Boundaries
 
@@ -730,7 +730,7 @@ MySQL Application State
 
 The agent is the core AI component. There must be **ONE primary adaptive agent**.
 
-VoxCode must not be a fixed pipeline such as:
+Jark must not be a fixed pipeline such as:
 
 ```text
 Search
@@ -969,7 +969,7 @@ MCP should be included as a **focused tool interface for interoperability**, NOT
 The goal is to create a clean tool boundary:
 
 ```text
-VoxCode Agent
+Jark Agent
       │
       │ MCP
       ▼
@@ -987,7 +987,7 @@ Repository Tools
 ### MCP Requirements
 
 * Implement a focused MCP server/interface
-* Expose only useful VoxCode capabilities/tools
+* Expose only useful Jark capabilities/tools
 * MCP is an interoperability/tool interface, NOT a separate architecture
 * Do NOT build a large MCP ecosystem
 * Do NOT create dozens of unnecessary servers
@@ -1019,7 +1019,7 @@ AI Configuration
 Conversation Context
 ```
 
-However, VoxCode's core agent logic should remain inside the application rather than being completely hidden behind framework abstractions.
+However, Jark's core agent logic should remain inside the application rather than being completely hidden behind framework abstractions.
 
 ---
 
@@ -1141,7 +1141,7 @@ The Evidence Engine therefore acts as a bridge between probabilistic reasoning a
 
 # 28. Remediation Architecture
 
-Remediation is **supporting scope**, not VoxCode's primary identity.
+Remediation is **supporting scope**, not Jark's primary identity.
 
 ```text
 Validated Finding
@@ -1198,7 +1198,7 @@ replace("old code", "new code")
 2. **AST-aware transformation** using JavaParser
 3. **AI-generated targeted patch** only when deterministic transformation is insufficient
 
-The AI can **propose** a change, but VoxCode should control how that change is actually applied.
+The AI can **propose** a change, but Jark should control how that change is actually applied.
 
 ```text
 OpenRewrite transformation (preferred for Java/Spring)
@@ -1265,7 +1265,7 @@ The original repository state must remain recoverable.
 Docker provides execution isolation.
 
 ```text
-VoxCode
+Jark
    │
    ▼
 Temporary Workspace
@@ -1292,7 +1292,7 @@ Do not build a custom container orchestration platform.
 
 # 34. Verification Pipeline
 
-Verification is one of VoxCode's most important technical components.
+Verification is one of Jark's most important technical components.
 
 ```text
 Modified Workspace
@@ -1380,7 +1380,7 @@ If unsuccessful:
 Rollback
 ```
 
-VoxCode must never enter an infinite autonomous repair loop.
+Jark must never enter an infinite autonomous repair loop.
 
 ---
 
@@ -1419,7 +1419,7 @@ The user must clearly know that the attempted modification was not accepted.
 The technical priority is:
 
 ```text
-                    VoxCode
+                    Jark
                        │
         ┌──────────────┴──────────────┐
         │                             │
@@ -1436,7 +1436,7 @@ The technical priority is:
                   EVALUATION
 ```
 
-VoxCode should never become:
+Jark should never become:
 
 > "An AI that writes code."
 
@@ -1583,7 +1583,7 @@ Agent traces should remain associated with the relevant investigation/execution.
 
 # 43. Security Architecture
 
-VoxCode processes repositories and can execute code, so security is a first-class concern.
+Jark processes repositories and can execute code, so security is a first-class concern.
 
 ## Repository Security
 
@@ -1735,7 +1735,7 @@ Evaluation must be developed **alongside the product**, not added at the end.
 ```text
 Benchmark Dataset
        ↓
-VoxCode
+Jark
        ↓
 Agent Traces
        ↓
@@ -1748,7 +1748,7 @@ Metrics
 Evaluation Report
 ```
 
-This makes VoxCode a measurable engineering system rather than a demo.
+This makes Jark a measurable engineering system rather than a demo.
 
 ---
 
@@ -1847,7 +1847,7 @@ Early Termination Rate
 
 The most important qualitative property is:
 
-> **Can VoxCode demonstrate traces where evidence changes the investigation path?**
+> **Can Jark demonstrate traces where evidence changes the investigation path?**
 
 If yes, that provides evidence of adaptive agent behavior rather than a fixed pipeline.
 
@@ -1948,7 +1948,7 @@ Service
 Repository
 ```
 
-Then verify that VoxCode correctly constructs:
+Then verify that Jark correctly constructs:
 
 ```text
 AST
@@ -2083,7 +2083,7 @@ No Kubernetes is required.
 
 ## No Kafka
 
-Kafka does not solve a core VoxCode problem during V1.
+Kafka does not solve a core Jark problem during V1.
 
 ## No Kubernetes
 
@@ -2199,7 +2199,7 @@ If time becomes limited:
 # 66. Final End-to-End Technical Flow
 
 ```text
-                         VOXCODE
+                         JARK
                             │
                          React UI
                             │
@@ -2268,7 +2268,7 @@ If time becomes limited:
 
 # 67. Final Technical Principles
 
-VoxCode follows these non-negotiable principles:
+Jark follows these non-negotiable principles:
 
 ### 1. Deterministic intelligence before LLM guessing
 
@@ -2335,7 +2335,7 @@ Failure
 
 ### 9. Evaluation is part of the product
 
-VoxCode must be able to demonstrate whether its architecture actually works.
+Jark must be able to demonstrate whether its architecture actually works.
 
 ### 10. Infrastructure must remain proportional
 
@@ -2345,10 +2345,10 @@ No technology should be added merely to make the architecture look impressive.
 
 # 68. Final Locked Technical Identity
 
-The final VoxCode architecture is:
+The final Jark architecture is:
 
 ```text
-                    VOXCODE
+                    JARK
                        │
                        ▼
               Repository Intelligence
@@ -2400,7 +2400,7 @@ The final VoxCode architecture is:
                   Evaluation
 ```
 
-> **VoxCode's technical differentiation is not that it uses an LLM to modify code. Its differentiation is that it combines deterministic Java/Spring repository intelligence, adaptive agentic investigation, evidence-backed findings, controlled remediation, isolated execution, and executable verification into one closed engineering loop.**
+> **Jark's technical differentiation is not that it uses an LLM to modify code. Its differentiation is that it combines deterministic Java/Spring repository intelligence, adaptive agentic investigation, evidence-backed findings, controlled remediation, isolated execution, and executable verification into one closed engineering loop.**
 
 ### Final technical formula
 
@@ -2427,7 +2427,7 @@ Build/Test Verification
     +
 Evaluation
     =
-VOXCODE
+JARK
 ```
 
-**This is the final locked Technical Design direction for VoxCode.**
+**This is the final locked Technical Design direction for Jark.**

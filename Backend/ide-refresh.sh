@@ -1,5 +1,5 @@
 #!/bin/bash
-# IDE Refresh Script for VoxCode Backend
+# IDE Refresh Script for Jark Backend
 # This script forces a Maven project refresh to sync IDE configuration
 
 echo "Cleaning Maven project..."

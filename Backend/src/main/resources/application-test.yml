@@ -17,11 +17,11 @@ spring:
 logging:
   level:
     root: INFO
-    com.example.VoxCode: DEBUG
+    com.example.Jark: DEBUG
 
-voxcode:
+jark:
   workspace:
-    base-dir: ${java.io.tmpdir}/voxcode_test_workspaces
+    base-dir: ${java.io.tmpdir}/jark_test_workspaces
   rag:
     top-k: 5
     max-context-tokens: 2000
