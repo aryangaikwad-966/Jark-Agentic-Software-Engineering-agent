@@ -2,8 +2,8 @@
 
 ## Current Project Status
 
-**Current Phase:** Phase 20 — Limited Repair
-**Current Task:** VXC-190 — Bounded Repair Loop
+**Current Phase:** Phase 21 — Rollback
+**Current Task:** VXC-200 — State Preservation and Recovery
 **Current Task Status:** COMPLETED
 
 ### Completed Tasks
@@ -29,19 +29,19 @@
 - [x] VXC-170 — Isolated Workspace Execution
 - [x] VXC-180 — Executable Verification
 - [x] VXC-190 — Bounded Repair Loop
+- [x] VXC-200 — State Preservation and Recovery
 
 ### In Progress Tasks
-- [ ] VXC-200 — State Preservation and Recovery
+- [ ] VXC-210 — Report Generation
 
 ### Next Tasks
-- [ ] VXC-200 — State Preservation and Recovery
 - [ ] VXC-210 — Report Generation
 - [ ] VXC-220 — Telemetry and Metrics
 - [ ] VXC-095 — Focused MCP Server (OPTIONAL)
 
 ### Overall Progress
-**20 / 28 phases completed** (Phases 0–19 complete)
-**22 / 34 VXC tasks completed** (64.7% complete)
+**21 / 28 phases completed** (Phases 0–20 complete)
+**23 / 34 VXC tasks completed** (67.6% complete)
 **Phase 0:** 2/2 tasks complete (100%)  
 **Phase 1:** 2/2 tasks complete (100%)  
 **Phase 2:** 1/1 tasks complete (100%)  
@@ -62,7 +62,6 @@
 **Phase 17:** 1/1 tasks complete (100%)
 **Phase 18:** 1/1 tasks complete (100%)
 **Phase 19:** 1/1 tasks complete (100%)
-**Phase 20:** 1/1 tasks complete (100%)
 **Phase 20:** 1/1 tasks complete (100%)
 **Phase 21:** 1/1 tasks complete (100%)
 
@@ -99,15 +98,15 @@ The next task is determined from the existing dependency order in TODO.md. Do NO
 | 10 | MCP Tool Interface | NOT STARTED (OPTIONAL) |
 | 11 | Adaptive Investigation Agent | COMPLETE |
 | 12 | Agent Evaluation | COMPLETE |
-| 13 | Evidence Engine | NOT STARTED |
-| 14 | Finding Validation | NOT STARTED |
-| 15 | Engineering Planning | NOT STARTED |
-| 16 | Human Approval | NOT STARTED |
-| 17 | Bounded Remediation | NOT STARTED |
-| 18 | Docker Sandbox | NOT STARTED |
-| 19 | Build/Test/Static Verification | NOT STARTED |
-| 20 | Limited Repair | NOT STARTED |
-| 21 | Rollback | NOT STARTED |
+| 13 | Evidence Engine | COMPLETE |
+| 14 | Finding Validation | COMPLETE |
+| 15 | Engineering Planning | COMPLETE |
+| 16 | Human Approval | COMPLETE |
+| 17 | Bounded Remediation | COMPLETE |
+| 18 | Docker Sandbox | COMPLETE |
+| 19 | Build/Test/Static Verification | COMPLETE |
+| 20 | Limited Repair | COMPLETE |
+| 21 | Rollback | COMPLETE |
 | 22 | Engineering Report | NOT STARTED |
 | 23 | Observability | NOT STARTED |
 | 24 | Security Hardening | NOT STARTED |
@@ -1000,7 +999,7 @@ CI:
 
 ## Phase 21 — Rollback
 
-### [ ] VXC-200 — State Preservation and Recovery
+### [x] VXC-200 — State Preservation and Recovery (COMPLETED)
 Priority: P0
 Phase: 21
 Dependencies: VXC-190
@@ -1017,6 +1016,29 @@ Tasks:
   - Remediation violates the approved scope
 - Verify restoration.
 - Record the rollback action in the execution history and mark remediation as `ROLLED_BACK`.
+
+**Implementation Summary:**
+- Created RollbackService with comprehensive state preservation and recovery
+- Implemented workspace snapshot creation with SHA-256 checksums for all files
+- Captured Git commit SHA and branch information when available
+- Stored snapshots in configurable base directory (/tmp/voxcode/snapshots by default)
+- Implemented rollback trigger detection for:
+  - Unauthorized modifications (unauthorized files, unexpected modifications)
+  - Scope violations (diff mismatch, remediation outside scope, scope expansion rejected)
+  - Repair budget exceeded
+  - Verification permanent failure (max retries reached or retry failed)
+- Implemented workspace restoration with:
+  - Deletion of rogue files created during failed remediation
+  - Restoration of all original files from snapshot
+  - SHA-256 checksum verification of restored files
+  - Detection of unexpected files remaining after rollback
+- Integrated with RemediationService to snapshot before remediation
+- Integrated with RepairLoopService to trigger rollback on scope violation
+- Record rollback in Remediation entity (status ROLLED_BACK, rollbackInfo JSON)
+- Record rollback in Execution entity (status ROLLED_BACK, execution log entry)
+- Snapshot cleanup on successful remediation completion
+- 18 unit tests covering trigger detection, snapshot creation, rollback execution, restoration verification, and cleanup
+- All tests passing successfully
 
 Deliverables:
 - `RollbackService`.
