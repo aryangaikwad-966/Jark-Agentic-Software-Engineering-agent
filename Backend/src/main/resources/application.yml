@@ -28,3 +28,10 @@ sandbox:
 # Docker Configuration
 docker:
   host: unix:///var/run/docker.sock
+
+voxcode:
+  security:
+    jwt:
+      # A development-only fallback. Production must set VOXCODE_JWT_SECRET to a unique base64-encoded 256-bit key.
+      secret: ${VOXCODE_JWT_SECRET:dm94Y29kZS1kZXZlbG9wbWVudC1qd3Qtc2VjcmV0LTMya2V5}
+      expiration-seconds: ${VOXCODE_JWT_EXPIRATION_SECONDS:3600}

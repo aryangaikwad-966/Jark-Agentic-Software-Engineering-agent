@@ -25,6 +25,10 @@ public class User {
     
     @Column(nullable = false, unique = true, length = 255)
     private String email;
+
+    // Nullable only for users created before VXC-230; those accounts cannot authenticate until reset.
+    @Column(name = "password_hash", length = 255)
+    private String passwordHash;
     
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -66,7 +66,7 @@ class RepairLoopServiceTest {
     private static class PassingVerificationStub extends VerificationService {
 
         PassingVerificationStub() {
-            super(null, null, null, null, null);
+            super(null, null, null, null, null, null);
         }
 
         @Override

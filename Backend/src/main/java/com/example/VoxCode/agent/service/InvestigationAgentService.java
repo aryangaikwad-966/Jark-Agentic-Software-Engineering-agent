@@ -48,6 +48,7 @@ public class InvestigationAgentService {
     private final CodeRepositoryRepository codeRepositoryRepository;
     private final EvidenceEngine evidenceEngine;
     private final ObjectMapper objectMapper;
+    private final com.example.VoxCode.service.MetricsService metricsService;
 
     /**
      * Orchestrates the complete investigation workflow.
@@ -55,7 +56,10 @@ public class InvestigationAgentService {
     @Transactional
     public Investigation orchestrateInvestigation(Long repositoryId, String userRequest) {
         log.info("Starting investigation for repository {} with request: {}", repositoryId, userRequest);
-        
+        metricsService.recordInvestigationEvent("started");
+
+        long startTime = System.currentTimeMillis();
+
         // Step 1: Classify the request
         RequestClassification classification = classificationService.classifyRequest(userRequest);
         
@@ -93,7 +97,11 @@ public class InvestigationAgentService {
         
         investigationRepository.save(investigation);
         log.info("Investigation {} completed with status: {}", investigation.getId(), investigation.getStatus());
-        
+
+        long duration = System.currentTimeMillis() - startTime;
+        metricsService.recordInvestigationDuration(investigation.getStatus(), duration);
+        metricsService.recordInvestigationEvent("completed");
+
         return investigation;
     }
 
@@ -169,6 +177,8 @@ public class InvestigationAgentService {
      */
     private InvestigationDecision getNextDecision(Investigation investigation, String userRequest, 
                                                   RequestClassification classification, InvestigationDecision previousDecision) {
+        long startTime = System.currentTimeMillis();
+        String model = "configured";
         try {
             String prompt = buildInvestigationPrompt(investigation, userRequest, classification, previousDecision);
             
@@ -206,11 +216,23 @@ public class InvestigationAgentService {
                     .call()
                     .content()
                     .trim();
+
+            InvestigationDecision decision = objectMapper.readValue(response, InvestigationDecision.class);
+
+            long duration = System.currentTimeMillis() - startTime;
+            metricsService.recordLlmCall(model, "success");
+            metricsService.recordLlmLatency(model, duration);
+            // Spring AI's ChatClient abstraction does not expose provider usage consistently.
+            // Keep this explicitly labelled as an estimate rather than reporting fabricated usage.
+            metricsService.recordLlmTokenUsage(model, "input_estimated", estimateTokens(prompt));
+            metricsService.recordLlmTokenUsage(model, "output_estimated", estimateTokens(response));
             
-            // Parse JSON response
-            return objectMapper.readValue(response, InvestigationDecision.class);
+            return decision;
             
         } catch (Exception e) {
+            long duration = System.currentTimeMillis() - startTime;
+            metricsService.recordLlmCall(model, "error");
+            metricsService.recordLlmLatency(model, duration);
             log.error("Failed to get next decision from agent", e);
             return new InvestigationDecision(
                     InvestigationDecision.DecisionAction.STOP,
@@ -224,21 +246,38 @@ public class InvestigationAgentService {
         }
     }
 
+    private int estimateTokens(String content) {
+        if (content == null || content.isBlank()) {
+            return 0;
+        }
+        return (content.length() + 3) / 4;
+    }
+
     /**
      * Executes a tool call based on the agent's decision.
      * Simplified version for initial implementation.
      */
     private String executeTool(InvestigationDecision decision) {
+        long startTime = System.currentTimeMillis();
+        String toolName = decision.toolName();
         try {
-            String toolName = decision.toolName();
             log.info("Executing tool: {}", toolName);
-            
+
             // For now, return a placeholder response
             // Full implementation would parse parameters and call actual tools
-            return "Tool " + toolName + " executed (placeholder implementation)";
-            
+            String result = "Tool " + toolName + " executed (placeholder implementation)";
+
+            long duration = System.currentTimeMillis() - startTime;
+            metricsService.recordToolExecution(toolName, "success");
+            metricsService.recordToolLatency(toolName, duration);
+
+            return result;
+
         } catch (Exception e) {
             log.error("Failed to execute tool: {}", decision.toolName(), e);
+            long duration = System.currentTimeMillis() - startTime;
+            metricsService.recordToolExecution(toolName, "error");
+            metricsService.recordToolLatency(toolName, duration);
             return "Error executing tool: " + e.getMessage();
         }
     }

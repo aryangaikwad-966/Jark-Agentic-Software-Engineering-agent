@@ -32,6 +32,7 @@ public class VerificationService {
     private final RemediationRepository remediationRepository;
     private final ExecutionSandboxService sandboxService;
     private final ObjectMapper objectMapper;
+    private final MetricsService metricsService;
 
     /**
      * Verification status constants.
@@ -53,6 +54,9 @@ public class VerificationService {
     @Transactional
     public VerificationResult verifyRemediation(Long remediationId, String containerId, String workspacePath) {
         log.info("Starting verification pipeline for remediation ID {}", remediationId);
+        metricsService.recordVerification("started");
+
+        long startTime = System.currentTimeMillis();
 
         Remediation remediation = remediationRepository.findById(remediationId)
                 .orElseThrow(() -> new IllegalArgumentException("Remediation not found: " + remediationId));
@@ -89,6 +93,10 @@ public class VerificationService {
             savedResult.markFailed("Verification error: " + e.getMessage());
         }
 
+        long duration = System.currentTimeMillis() - startTime;
+        metricsService.recordVerificationDuration(savedResult.getStatus(), duration);
+        metricsService.recordVerification(savedResult.getStatus());
+
         return verificationResultRepository.save(savedResult);
     }
 
@@ -97,6 +105,7 @@ public class VerificationService {
      */
     private void executeBuildInSandbox(String containerId, String workspacePath, VerificationResult result) {
         log.info("Executing mvn clean verify in container {}", containerId);
+        long startTime = System.currentTimeMillis();
 
         try {
             String output = sandboxService.executeCommand(containerId, "mvn", "clean", "verify");
@@ -108,11 +117,13 @@ public class VerificationService {
             // TODO: Parse test result XMLs
             
             log.info("Build execution completed");
+            metricsService.recordBuildDuration("SUCCESS", System.currentTimeMillis() - startTime);
 
         } catch (Exception e) {
             log.error("Build execution failed: {}", e.getMessage(), e);
             result.setStderr(e.getMessage());
             result.setExitCode(1);
+            metricsService.recordBuildDuration("FAILED", System.currentTimeMillis() - startTime);
             throw new RuntimeException("Build execution failed: " + e.getMessage(), e);
         }
     }
