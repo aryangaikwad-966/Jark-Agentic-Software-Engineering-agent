@@ -35,7 +35,10 @@ public class RepositoryTools {
      * Tool function to read a file from the repository workspace.
      * Enforces strict path validation to prevent directory traversal attacks.
      */
-    @Description("Read a file from the repository workspace. Returns the file content as text. Only files within the repository workspace are accessible.")
+    @Description(
+            "Read a file from the repository workspace. Returns the file content as text. "
+                    + "Only files within the repository workspace are accessible."
+    )
     public Function<ReadFileRequest, ReadFileResponse> readFile() {
         return request -> {
             log.info("Tool call: readFile with filePath='{}' in repository {}", 
@@ -92,7 +95,10 @@ public class RepositoryTools {
      * Tool function to list files in a directory from the repository workspace.
      * Enforces strict path validation to prevent directory traversal attacks.
      */
-    @Description("List files in a directory from the repository workspace. Returns a list of file paths and basic information. Only directories within the repository workspace are accessible.")
+    @Description(
+            "List files in a directory from the repository workspace. Returns a list of file "
+                    + "paths and basic information. Only directories within the repository workspace are accessible."
+    )
     public Function<ListFilesRequest, ListFilesResponse> listFiles() {
         return request -> {
             log.info("Tool call: listFiles with directoryPath='{}' in repository {}", 

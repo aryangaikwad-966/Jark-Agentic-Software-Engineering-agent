@@ -33,94 +33,8 @@ public class DependencyGraphService {
         Graph<DependencyNode, DependencyEdge> graph = new DirectedMultigraph<>(DependencyEdge.class);
         Map<String, DependencyNode> nodeLookup = new HashMap<>();
 
-        // First pass: Create nodes for all classes, interfaces, enums and their methods
-        for (ClassInfo classInfo : classes) {
-            DependencyNode classNode = createClassNode(classInfo);
-            graph.addVertex(classNode);
-            nodeLookup.put(classNode.getId(), classNode);
-
-            for (MethodInfo methodInfo : classInfo.getMethods()) {
-                DependencyNode methodNode = createMethodNode(classInfo, methodInfo);
-                graph.addVertex(methodNode);
-                nodeLookup.put(methodNode.getId(), methodNode);
-
-                // Add CONTAINS edge
-                graph.addEdge(classNode, methodNode, new DependencyEdge(DependencyEdge.EdgeType.CONTAINS));
-            }
-        }
-
-        // Second pass: Create edges based on dependencies
-        for (ClassInfo classInfo : classes) {
-            DependencyNode sourceNode = nodeLookup.get(classInfo.getFullyQualifiedName());
-            if (sourceNode == null) continue;
-
-            // 1. EXTENDS
-            if (classInfo.getSuperClass() != null) {
-                String superClassName = resolveTypeName(classInfo.getSuperClass(), classInfo.getImports(), classInfo.getPackageName());
-                DependencyNode targetNode = nodeLookup.get(superClassName);
-                if (targetNode != null) {
-                    graph.addEdge(sourceNode, targetNode, new DependencyEdge(DependencyEdge.EdgeType.EXTENDS));
-                }
-            }
-
-            // 2. IMPLEMENTS
-            if (classInfo.getImplementedInterfaces() != null) {
-                for (String interfaceName : classInfo.getImplementedInterfaces()) {
-                    String resolvedName = resolveTypeName(interfaceName, classInfo.getImports(), classInfo.getPackageName());
-                    DependencyNode targetNode = nodeLookup.get(resolvedName);
-                    if (targetNode != null) {
-                        graph.addEdge(sourceNode, targetNode, new DependencyEdge(DependencyEdge.EdgeType.IMPLEMENTS));
-                    }
-                }
-            }
-
-            // 3. DEPENDS_ON (Field types)
-            if (classInfo.getFields() != null) {
-                for (FieldInfo field : classInfo.getFields()) {
-                    String resolvedName = resolveTypeName(field.getType(), classInfo.getImports(), classInfo.getPackageName());
-                    DependencyNode targetNode = nodeLookup.get(resolvedName);
-                    if (targetNode != null && !targetNode.getId().equals(sourceNode.getId())) {
-                        graph.addEdge(sourceNode, targetNode, new DependencyEdge(DependencyEdge.EdgeType.DEPENDS_ON));
-                    }
-                }
-            }
-
-            // 4. DEPENDS_ON (Method return types and parameters) & CALLS (Method calls)
-            for (MethodInfo methodInfo : classInfo.getMethods()) {
-                DependencyNode methodNode = nodeLookup.get(getMethodId(classInfo, methodInfo));
-
-                // Add DEPENDS_ON for method return type to the class node
-                String returnType = resolveTypeName(methodInfo.getReturnType(), classInfo.getImports(), classInfo.getPackageName());
-                DependencyNode returnTargetNode = nodeLookup.get(returnType);
-                if (returnTargetNode != null && !returnTargetNode.getId().equals(sourceNode.getId())) {
-                     graph.addEdge(sourceNode, returnTargetNode, new DependencyEdge(DependencyEdge.EdgeType.DEPENDS_ON));
-                }
-                
-                // Add DEPENDS_ON for method parameters
-                for (String paramType : methodInfo.getParameterTypes()) {
-                     String resolvedParamType = resolveTypeName(paramType, classInfo.getImports(), classInfo.getPackageName());
-                     DependencyNode paramTargetNode = nodeLookup.get(resolvedParamType);
-                     if (paramTargetNode != null && !paramTargetNode.getId().equals(sourceNode.getId())) {
-                         graph.addEdge(sourceNode, paramTargetNode, new DependencyEdge(DependencyEdge.EdgeType.DEPENDS_ON));
-                     }
-                }
-
-                // Add CALLS edges (best effort: we only have method names, not signatures of calls)
-                // We link to any method with a matching name in the graph that we can find
-                if (methodInfo.getMethodCalls() != null && methodNode != null) {
-                    for (String calledMethodName : methodInfo.getMethodCalls()) {
-                        // Find any method node in the lookup with this name (naive resolution for now)
-                        for (DependencyNode possibleTarget : nodeLookup.values()) {
-                            if (possibleTarget.getType() == DependencyNode.NodeType.METHOD
-                                    && possibleTarget.getName().equals(calledMethodName)
-                                    && !possibleTarget.getId().equals(methodNode.getId())) {
-                                graph.addEdge(methodNode, possibleTarget, new DependencyEdge(DependencyEdge.EdgeType.CALLS));
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        addNodesForClasses(graph, nodeLookup, classes);
+        addDependencyEdges(graph, nodeLookup, classes);
 
         log.info("Built dependency graph with {} nodes and {} edges", graph.vertexSet().size(), graph.edgeSet().size());
         return graph;
@@ -133,7 +47,7 @@ public class DependencyGraphService {
         DependencyNode node = findNodeById(graph, classFqn);
         if (node == null) return Set.of();
         return graph.outgoingEdgesOf(node).stream()
-                .filter(e -> e.getType() == DependencyEdge.EdgeType.DEPENDS_ON || e.getType() == DependencyEdge.EdgeType.EXTENDS || e.getType() == DependencyEdge.EdgeType.IMPLEMENTS)
+                .filter(this::isDependencyEdge)
                 .map(graph::getEdgeTarget)
                 .collect(Collectors.toSet());
     }
@@ -145,9 +59,188 @@ public class DependencyGraphService {
         DependencyNode node = findNodeById(graph, classFqn);
         if (node == null) return Set.of();
         return graph.incomingEdgesOf(node).stream()
-                .filter(e -> e.getType() == DependencyEdge.EdgeType.DEPENDS_ON || e.getType() == DependencyEdge.EdgeType.EXTENDS || e.getType() == DependencyEdge.EdgeType.IMPLEMENTS)
+                .filter(this::isDependencyEdge)
                 .map(graph::getEdgeSource)
                 .collect(Collectors.toSet());
+    }
+
+    private void addNodesForClasses(
+            Graph<DependencyNode, DependencyEdge> graph,
+            Map<String, DependencyNode> nodeLookup,
+            List<ClassInfo> classes
+    ) {
+        for (ClassInfo classInfo : classes) {
+            DependencyNode classNode = createClassNode(classInfo);
+            graph.addVertex(classNode);
+            nodeLookup.put(classNode.getId(), classNode);
+
+            for (MethodInfo methodInfo : classInfo.getMethods()) {
+                DependencyNode methodNode = createMethodNode(classInfo, methodInfo);
+                graph.addVertex(methodNode);
+                nodeLookup.put(methodNode.getId(), methodNode);
+                graph.addEdge(classNode, methodNode, new DependencyEdge(DependencyEdge.EdgeType.CONTAINS));
+            }
+        }
+    }
+
+    private void addDependencyEdges(
+            Graph<DependencyNode, DependencyEdge> graph,
+            Map<String, DependencyNode> nodeLookup,
+            List<ClassInfo> classes
+    ) {
+        for (ClassInfo classInfo : classes) {
+            DependencyNode sourceNode = nodeLookup.get(classInfo.getFullyQualifiedName());
+            if (sourceNode == null) {
+                continue;
+            }
+            addExtendsEdge(graph, nodeLookup, classInfo, sourceNode);
+            addImplementsEdges(graph, nodeLookup, classInfo, sourceNode);
+            addFieldDependencyEdges(graph, nodeLookup, classInfo, sourceNode);
+            addMethodDependencyAndCallEdges(graph, nodeLookup, classInfo, sourceNode);
+        }
+    }
+
+    private void addExtendsEdge(
+            Graph<DependencyNode, DependencyEdge> graph,
+            Map<String, DependencyNode> nodeLookup,
+            ClassInfo classInfo,
+            DependencyNode sourceNode
+    ) {
+        if (classInfo.getSuperClass() == null) {
+            return;
+        }
+        String superClassName = resolveTypeName(
+                classInfo.getSuperClass(),
+                classInfo.getImports(),
+                classInfo.getPackageName()
+        );
+        DependencyNode targetNode = nodeLookup.get(superClassName);
+        if (targetNode != null) {
+            graph.addEdge(sourceNode, targetNode, new DependencyEdge(DependencyEdge.EdgeType.EXTENDS));
+        }
+    }
+
+    private void addImplementsEdges(
+            Graph<DependencyNode, DependencyEdge> graph,
+            Map<String, DependencyNode> nodeLookup,
+            ClassInfo classInfo,
+            DependencyNode sourceNode
+    ) {
+        if (classInfo.getImplementedInterfaces() == null) {
+            return;
+        }
+        for (String interfaceName : classInfo.getImplementedInterfaces()) {
+            String resolvedName = resolveTypeName(
+                    interfaceName,
+                    classInfo.getImports(),
+                    classInfo.getPackageName()
+            );
+            DependencyNode targetNode = nodeLookup.get(resolvedName);
+            if (targetNode != null) {
+                graph.addEdge(sourceNode, targetNode, new DependencyEdge(DependencyEdge.EdgeType.IMPLEMENTS));
+            }
+        }
+    }
+
+    private void addFieldDependencyEdges(
+            Graph<DependencyNode, DependencyEdge> graph,
+            Map<String, DependencyNode> nodeLookup,
+            ClassInfo classInfo,
+            DependencyNode sourceNode
+    ) {
+        if (classInfo.getFields() == null) {
+            return;
+        }
+        for (FieldInfo field : classInfo.getFields()) {
+            String resolvedName = resolveTypeName(
+                    field.getType(),
+                    classInfo.getImports(),
+                    classInfo.getPackageName()
+            );
+            addDependsOnEdge(graph, nodeLookup.get(resolvedName), sourceNode);
+        }
+    }
+
+    private void addMethodDependencyAndCallEdges(
+            Graph<DependencyNode, DependencyEdge> graph,
+            Map<String, DependencyNode> nodeLookup,
+            ClassInfo classInfo,
+            DependencyNode sourceNode
+    ) {
+        for (MethodInfo methodInfo : classInfo.getMethods()) {
+            DependencyNode methodNode = nodeLookup.get(getMethodId(classInfo, methodInfo));
+            addMethodReturnTypeDependencyEdge(graph, nodeLookup, classInfo, methodInfo, sourceNode);
+            addMethodParameterDependencyEdges(graph, nodeLookup, classInfo, methodInfo, sourceNode);
+            addMethodCallEdges(graph, nodeLookup, methodInfo, methodNode);
+        }
+    }
+
+    private void addMethodReturnTypeDependencyEdge(
+            Graph<DependencyNode, DependencyEdge> graph,
+            Map<String, DependencyNode> nodeLookup,
+            ClassInfo classInfo,
+            MethodInfo methodInfo,
+            DependencyNode sourceNode
+    ) {
+        String returnType = resolveTypeName(
+                methodInfo.getReturnType(),
+                classInfo.getImports(),
+                classInfo.getPackageName()
+        );
+        addDependsOnEdge(graph, nodeLookup.get(returnType), sourceNode);
+    }
+
+    private void addMethodParameterDependencyEdges(
+            Graph<DependencyNode, DependencyEdge> graph,
+            Map<String, DependencyNode> nodeLookup,
+            ClassInfo classInfo,
+            MethodInfo methodInfo,
+            DependencyNode sourceNode
+    ) {
+        for (String paramType : methodInfo.getParameterTypes()) {
+            String resolvedParamType = resolveTypeName(
+                    paramType,
+                    classInfo.getImports(),
+                    classInfo.getPackageName()
+            );
+            addDependsOnEdge(graph, nodeLookup.get(resolvedParamType), sourceNode);
+        }
+    }
+
+    private void addMethodCallEdges(
+            Graph<DependencyNode, DependencyEdge> graph,
+            Map<String, DependencyNode> nodeLookup,
+            MethodInfo methodInfo,
+            DependencyNode methodNode
+    ) {
+        if (methodInfo.getMethodCalls() == null || methodNode == null) {
+            return;
+        }
+        for (String calledMethodName : methodInfo.getMethodCalls()) {
+            for (DependencyNode possibleTarget : nodeLookup.values()) {
+                if (possibleTarget.getType() == DependencyNode.NodeType.METHOD
+                        && possibleTarget.getName().equals(calledMethodName)
+                        && !possibleTarget.getId().equals(methodNode.getId())) {
+                    graph.addEdge(methodNode, possibleTarget, new DependencyEdge(DependencyEdge.EdgeType.CALLS));
+                }
+            }
+        }
+    }
+
+    private void addDependsOnEdge(
+            Graph<DependencyNode, DependencyEdge> graph,
+            DependencyNode targetNode,
+            DependencyNode sourceNode
+    ) {
+        if (targetNode != null && !targetNode.getId().equals(sourceNode.getId())) {
+            graph.addEdge(sourceNode, targetNode, new DependencyEdge(DependencyEdge.EdgeType.DEPENDS_ON));
+        }
+    }
+
+    private boolean isDependencyEdge(DependencyEdge edge) {
+        return edge.getType() == DependencyEdge.EdgeType.DEPENDS_ON
+                || edge.getType() == DependencyEdge.EdgeType.EXTENDS
+                || edge.getType() == DependencyEdge.EdgeType.IMPLEMENTS;
     }
 
     private DependencyNode findNodeById(Graph<DependencyNode, DependencyEdge> graph, String id) {
@@ -190,7 +283,6 @@ public class DependencyGraphService {
         if (typeName.contains("<")) {
             typeName = typeName.substring(0, typeName.indexOf("<"));
         }
-        
         for (String imp : imports) {
             if (imp.endsWith("." + typeName)) {
                 return imp;

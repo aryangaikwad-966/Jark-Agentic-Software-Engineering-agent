@@ -77,58 +77,66 @@ public class EvidenceEngine {
         Finding savedFinding = findingRepository.save(finding);
 
         // 3. Build and persist child Evidence records
-        if (structuredFinding.evidenceReferences() != null) {
-            for (EvidenceItem item : structuredFinding.evidenceReferences()) {
-                Evidence evidence = new Evidence();
-                evidence.setFinding(savedFinding);
-                evidence.setEvidenceSource(item.source());
-                evidence.setEvidenceType(item.evidenceType());
-                evidence.setContent(item.content());
-                if (item.confidenceScore() != null) {
-                    evidence.setConfidence(item.confidenceScore());
-                } else {
-                    evidence.setConfidence(1.0);
-                }
-
-                // Extract metadata fields
-                if (item.metadata() != null) {
-                    if (item.metadata().containsKey("filePath")) {
-                        evidence.setFilePath((String) item.metadata().get("filePath"));
-                    }
-                    if (item.metadata().containsKey("className")) {
-                        evidence.setClassName((String) item.metadata().get("className"));
-                    }
-                    if (item.metadata().containsKey("methodName")) {
-                        evidence.setMethodName((String) item.metadata().get("methodName"));
-                    }
-                    if (item.metadata().containsKey("annotationName")) {
-                        evidence.setAnnotationName((String) item.metadata().get("annotationName"));
-                    }
-                    if (item.metadata().containsKey("startLine") && item.metadata().containsKey("endLine")) {
-                        int startLine = ((Number) item.metadata().get("startLine")).intValue();
-                        int endLine = ((Number) item.metadata().get("endLine")).intValue();
-                        evidence.setLineRange(startLine + "-" + endLine);
-                    }
-                }
-
-                try {
-                    evidence.setMetadata(item.metadata() != null
-                            ? objectMapper.writeValueAsString(item.metadata())
-                            : "{}");
-                } catch (JsonProcessingException e) {
-                    log.warn("Failed to serialize evidence item metadata, storing empty JSON", e);
-                    evidence.setMetadata("{}");
-                }
-
-                evidenceRepository.save(evidence);
-            }
-        }
+        saveEvidenceReferences(savedFinding, structuredFinding);
 
         log.info("Successfully recorded Finding ID {} with {} evidence items",
                 savedFinding.getId(),
                 structuredFinding.evidenceReferences() != null ? structuredFinding.evidenceReferences().size() : 0);
 
         return savedFinding;
+    }
+
+    private void saveEvidenceReferences(Finding savedFinding, StructuredFinding structuredFinding) {
+        if (structuredFinding.evidenceReferences() == null) {
+            return;
+        }
+        for (EvidenceItem item : structuredFinding.evidenceReferences()) {
+            Evidence evidence = new Evidence();
+            evidence.setFinding(savedFinding);
+            evidence.setEvidenceSource(item.source());
+            evidence.setEvidenceType(item.evidenceType());
+            evidence.setContent(item.content());
+            evidence.setConfidence(item.confidenceScore() != null ? item.confidenceScore() : 1.0);
+
+            populateMetadataFields(evidence, item);
+            setEvidenceMetadataJson(evidence, item);
+
+            evidenceRepository.save(evidence);
+        }
+    }
+
+    private void populateMetadataFields(Evidence evidence, EvidenceItem item) {
+        if (item.metadata() == null) {
+            return;
+        }
+        if (item.metadata().containsKey("filePath")) {
+            evidence.setFilePath((String) item.metadata().get("filePath"));
+        }
+        if (item.metadata().containsKey("className")) {
+            evidence.setClassName((String) item.metadata().get("className"));
+        }
+        if (item.metadata().containsKey("methodName")) {
+            evidence.setMethodName((String) item.metadata().get("methodName"));
+        }
+        if (item.metadata().containsKey("annotationName")) {
+            evidence.setAnnotationName((String) item.metadata().get("annotationName"));
+        }
+        if (item.metadata().containsKey("startLine") && item.metadata().containsKey("endLine")) {
+            int startLine = ((Number) item.metadata().get("startLine")).intValue();
+            int endLine = ((Number) item.metadata().get("endLine")).intValue();
+            evidence.setLineRange(startLine + "-" + endLine);
+        }
+    }
+
+    private void setEvidenceMetadataJson(Evidence evidence, EvidenceItem item) {
+        try {
+            evidence.setMetadata(item.metadata() != null
+                    ? objectMapper.writeValueAsString(item.metadata())
+                    : "{}");
+        } catch (JsonProcessingException e) {
+            log.warn("Failed to serialize evidence item metadata, storing empty JSON", e);
+            evidence.setMetadata("{}");
+        }
     }
 
     /**

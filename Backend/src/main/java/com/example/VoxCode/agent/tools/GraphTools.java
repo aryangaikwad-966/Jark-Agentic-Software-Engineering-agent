@@ -1,6 +1,5 @@
 package com.example.VoxCode.agent.tools;
 
-import com.example.VoxCode.dto.graph.DependencyNode;
 import com.example.VoxCode.dto.index.GraphQueryResult;
 import com.example.VoxCode.dto.index.RepositoryIndex;
 import com.example.VoxCode.service.RepositoryIndexService;
@@ -46,7 +45,10 @@ public class GraphTools {
     /**
      * Tool function to find dependents of a class (impact analysis).
      */
-    @Description("Find all classes that depend on the specified class (impact analysis). Returns dependent nodes and relationship information for understanding change impact.")
+    @Description(
+            "Find all classes that depend on the specified class (impact analysis). Returns "
+                    + "dependent nodes and relationship information for understanding change impact."
+    )
     public Function<FindDependentsRequest, FindDependentsResponse> findDependents() {
         return request -> {
             log.info("Tool call: findDependents for classFqn='{}' in repository {}", 
@@ -67,7 +69,10 @@ public class GraphTools {
     /**
      * Tool function to find callers of a method.
      */
-    @Description("Find all methods that call the specified method. Returns caller nodes and relationship information for understanding method call chains.")
+    @Description(
+            "Find all methods that call the specified method. Returns caller nodes and "
+                    + "relationship information for understanding method call chains."
+    )
     public Function<FindCallersRequest, FindCallersResponse> findCallers() {
         return request -> {
             log.info("Tool call: findCallers for methodId='{}' in repository {}", 
@@ -88,7 +93,10 @@ public class GraphTools {
     /**
      * Tool function to find callees of a method.
      */
-    @Description("Find all methods that are called by the specified method. Returns callee nodes and relationship information for understanding method call chains.")
+    @Description(
+            "Find all methods that are called by the specified method. Returns callee nodes "
+                    + "and relationship information for understanding method call chains."
+    )
     public Function<FindCalleesRequest, FindCalleesResponse> findCallees() {
         return request -> {
             log.info("Tool call: findCallees for methodId='{}' in repository {}", 

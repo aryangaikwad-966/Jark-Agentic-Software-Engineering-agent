@@ -26,7 +26,10 @@ public class AstTools {
     /**
      * Tool function to find a class by name in the repository.
      */
-    @Description("Find a class by its simple name in the repository. Returns class information including package, file path, annotations, methods, and fields.")
+    @Description(
+            "Find a class by its simple name in the repository. Returns class information "
+                    + "including package, file path, annotations, methods, and fields."
+    )
     public Function<FindClassRequest, FindClassResponse> findClass() {
         return request -> {
             log.info("Tool call: findClass with className='{}' in repository {}", 
@@ -68,7 +71,10 @@ public class AstTools {
     /**
      * Tool function to find classes annotated with a specific annotation.
      */
-    @Description("Find all classes annotated with a specific annotation name (e.g., 'RestController', 'Service'). Returns matching class information.")
+    @Description(
+            "Find all classes annotated with a specific annotation name "
+                    + "(e.g., 'RestController', 'Service'). Returns matching class information."
+    )
     public Function<FindAnnotationRequest, FindAnnotationResponse> findAnnotation() {
         return request -> {
             log.info("Tool call: findAnnotation with annotationName='{}' in repository {}", 
@@ -89,7 +95,10 @@ public class AstTools {
     /**
      * Tool function to find methods annotated with a specific annotation.
      */
-    @Description("Find all methods annotated with a specific annotation name (e.g., 'GetMapping', 'PostMapping'). Returns class information containing only matching methods.")
+    @Description(
+            "Find all methods annotated with a specific annotation name "
+                    + "(e.g., 'GetMapping', 'PostMapping'). Returns class information containing only matching methods."
+    )
     public Function<FindMethodAnnotationRequest, FindMethodAnnotationResponse> findMethodAnnotation() {
         return request -> {
             log.info("Tool call: findMethodAnnotation with annotationName='{}' in repository {}", 

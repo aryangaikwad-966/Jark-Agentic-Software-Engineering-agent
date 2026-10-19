@@ -154,6 +154,8 @@ public class InvestigationAgentService {
                     // Agent decided to stop without a finding
                     log.info("Agent decided to stop investigation: {}", currentDecision.reason());
                     return currentDecision;
+                default:
+                    throw new IllegalStateException("Unexpected decision action: " + currentDecision.action());
             }
         }
         

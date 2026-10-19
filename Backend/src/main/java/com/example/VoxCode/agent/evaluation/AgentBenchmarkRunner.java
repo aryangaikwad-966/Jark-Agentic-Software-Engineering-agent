@@ -63,6 +63,7 @@ public class AgentBenchmarkRunner {
                 }
                 case FP -> fp++;
                 case FN -> fn++;
+                default -> throw new IllegalStateException("Unexpected outcome: " + result.outcome());
             }
             totalLatency += result.latencyMs();
         }

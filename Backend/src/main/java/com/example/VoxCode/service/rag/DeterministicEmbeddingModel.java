@@ -57,13 +57,13 @@ public class DeterministicEmbeddingModel implements EmbeddingModel {
             if (token.isEmpty()) {
                 continue;
             }
-            int bucket = Math.abs(token.hashCode()) % dimensions;
+            int bucket = Math.floorMod(token.hashCode(), dimensions);
             raw[bucket] += 1.0;
 
             // Character trigrams
             for (int i = 0; i <= token.length() - 3; i++) {
                 String trigram = token.substring(i, i + 3);
-                int triBucket = Math.abs(trigram.hashCode()) % dimensions;
+                int triBucket = Math.floorMod(trigram.hashCode(), dimensions);
                 raw[triBucket] += 0.5;
             }
         }

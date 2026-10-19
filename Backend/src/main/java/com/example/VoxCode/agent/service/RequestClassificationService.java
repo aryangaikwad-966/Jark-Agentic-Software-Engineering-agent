@@ -40,7 +40,8 @@ public class RequestClassificationService {
                         - INVESTIGATE: The user wants explanation/investigation only. No code changes requested.
                         - REMEDIATE: The user identifies a specific issue and wants a bounded fix (e.g., "fix the missing @PreAuthorize").
                         - INVESTIGATE_AND_REMEDIATE: The user wants investigation followed by fixing.
-                        - OUT_OF_SCOPE: The request requires arbitrary feature generation, large-scale development, or unrestricted coding (e.g., "build an authentication system from scratch", "create a payment module").
+                        - OUT_OF_SCOPE: The request requires arbitrary feature generation, large-scale development,
+                          or unrestricted coding (e.g., "build an authentication system from scratch", "create a payment module").
                         
                         Return ONLY the classification name (e.g., "INVESTIGATE").
                         """)

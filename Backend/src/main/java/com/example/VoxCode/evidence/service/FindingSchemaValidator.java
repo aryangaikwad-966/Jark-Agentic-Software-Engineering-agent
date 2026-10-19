@@ -88,7 +88,10 @@ public class FindingSchemaValidator {
                 errors.add("lineRange startLine must be > 0, got: " + finding.lineRange().startLine());
             }
             if (finding.lineRange().endLine() < finding.lineRange().startLine()) {
-                errors.add("lineRange endLine (" + finding.lineRange().endLine() + ") cannot be less than startLine (" + finding.lineRange().startLine() + ")");
+                errors.add(
+                        "lineRange endLine (" + finding.lineRange().endLine()
+                                + ") cannot be less than startLine (" + finding.lineRange().startLine() + ")"
+                );
             }
         }
 

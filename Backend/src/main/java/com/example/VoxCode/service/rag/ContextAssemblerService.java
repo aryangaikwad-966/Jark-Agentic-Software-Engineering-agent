@@ -101,7 +101,7 @@ public class ContextAssemblerService {
         String typeTag = chunk.getDocumentType() != null ? chunk.getDocumentType().name() : "CODE";
         String targetName = chunk.getClassName() != null ? chunk.getClassName() : chunk.getFilePath();
 
-        sb.append(String.format("### [%s] %s (Relevance: %.2f | Source: %s)\n",
+        sb.append(String.format("### [%s] %s (Relevance: %.2f | Source: %s)%n",
                 typeTag,
                 targetName,
                 scored.getFinalScore(),

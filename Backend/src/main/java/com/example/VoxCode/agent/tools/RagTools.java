@@ -33,7 +33,10 @@ public class RagTools {
     /**
      * Tool function to search for semantic context using hybrid retrieval.
      */
-    @Description("Search for semantic context in the repository using hybrid retrieval (vector + lexical + metadata + dependency-aware). Returns relevant code chunks with scores.")
+    @Description(
+            "Search for semantic context in the repository using hybrid retrieval "
+                    + "(vector + lexical + metadata + dependency-aware). Returns relevant code chunks with scores."
+    )
     public Function<SearchSemanticContextRequest, SearchSemanticContextResponse> searchSemanticContext() {
         return request -> {
             log.info("Tool call: searchSemanticContext with query='{}' in repository {}", 
@@ -76,7 +79,10 @@ public class RagTools {
     /**
      * Tool function to assemble context with token budget management.
      */
-    @Description("Assemble semantic context with token budget management. Returns an optimized context that fits within the specified token limit while maximizing relevance.")
+    @Description(
+            "Assemble semantic context with token budget management. Returns an optimized context "
+                    + "that fits within the specified token limit while maximizing relevance."
+    )
     public Function<AssembleContextRequest, AssembleContextResponse> assembleContext() {
         return request -> {
             log.info("Tool call: assembleContext with query='{}', maxTokens={} in repository {}", 

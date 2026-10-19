@@ -102,7 +102,7 @@ public class DocumentParserService {
      */
     public List<CodeChunk> parseFile(Long repositoryId, Path workspacePath, Path file) throws IOException {
         String relativePath = workspacePath.relativize(file).toString().replace('\\', '/');
-        String fileName = file.getFileName().toString().toLowerCase();
+        String fileName = fileName(file, relativePath).toLowerCase();
 
         if (fileName.endsWith(".java")) {
             return parseJavaFile(repositoryId, relativePath, file);
@@ -117,8 +117,9 @@ public class DocumentParserService {
 
     private List<CodeChunk> parseJavaFile(Long repositoryId, String relativePath, Path file) throws IOException {
         List<CodeChunk> chunks = new ArrayList<>();
-        String content = sanitize(file, Files.readString(file, StandardCharsets.UTF_8));
-        boolean isTest = relativePath.contains("/test/") || file.getFileName().toString().endsWith("Test.java");
+        String currentFileName = fileName(file, relativePath);
+        String content = sanitize(currentFileName, Files.readString(file, StandardCharsets.UTF_8));
+        boolean isTest = relativePath.contains("/test/") || currentFileName.endsWith("Test.java");
         DocumentType docType = isTest ? DocumentType.TEST : DocumentType.SOURCE_CODE;
 
         ParseResult<CompilationUnit> parseResult = javaParser.parse(content);
@@ -188,7 +189,8 @@ public class DocumentParserService {
     }
 
     private List<CodeChunk> parseMarkdownFile(Long repositoryId, String relativePath, Path file) throws IOException {
-        List<String> lines = List.of(sanitize(file, Files.readString(file, StandardCharsets.UTF_8)).split("\\r?\\n", -1));
+        List<String> lines = List.of(sanitize(fileName(file, relativePath), Files.readString(file, StandardCharsets.UTF_8))
+                .split("\\r?\\n", -1));
         List<CodeChunk> chunks = new ArrayList<>();
 
         int sectionStart = 1;
@@ -224,12 +226,12 @@ public class DocumentParserService {
     }
 
     private List<CodeChunk> parseConfigFile(Long repositoryId, String relativePath, Path file) throws IOException {
-        String content = sanitize(file, Files.readString(file, StandardCharsets.UTF_8));
+        String content = sanitize(fileName(file, relativePath), Files.readString(file, StandardCharsets.UTF_8));
         return chunkTextByLines(repositoryId, relativePath, content, DocumentType.CONFIGURATION, null, null, "config");
     }
 
     private List<CodeChunk> parseGenericTextFile(Long repositoryId, String relativePath, Path file) throws IOException {
-        String content = sanitize(file, Files.readString(file, StandardCharsets.UTF_8));
+        String content = sanitize(fileName(file, relativePath), Files.readString(file, StandardCharsets.UTF_8));
         return chunkTextByLines(repositoryId, relativePath, content, DocumentType.DOCUMENTATION, null, null, "text");
     }
 
@@ -319,11 +321,16 @@ public class DocumentParserService {
                 || fileName.endsWith(".json") || fileName.endsWith(".xml");
     }
 
-    private String sanitize(Path file, String content) {
-        if (contentSanitizer.isSensitiveFileName(file.getFileName().toString())) {
+    private String sanitize(String fileName, String content) {
+        if (contentSanitizer.isSensitiveFileName(fileName)) {
             return "[REDACTED_SENSITIVE_FILE]";
         }
         return contentSanitizer.sanitizeForLlm(content);
+    }
+
+    private String fileName(Path file, String fallback) {
+        Path leaf = file.getFileName();
+        return leaf != null ? leaf.toString() : fallback;
     }
 
     private String generateId(Long repoId, String filePath, int startLine, String content) {

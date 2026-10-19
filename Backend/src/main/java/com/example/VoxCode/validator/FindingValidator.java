@@ -346,7 +346,7 @@ public class FindingValidator {
     /**
      * Simple result object for validation operations.
      */
-    private static class ValidationResult {
+    private static final class ValidationResult {
         private final boolean valid;
         private final String failureReason;
 
