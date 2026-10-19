@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.example.VoxCode.entity.CodeRepository;
 import com.example.VoxCode.exception.ResourceNotFoundException;
 import com.example.VoxCode.repository.CodeRepositoryRepository;
+import com.example.VoxCode.security.RepositoryContentSanitizer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RepositoryTools {
 
     private final CodeRepositoryRepository repositoryRepository;
+    private final RepositoryContentSanitizer contentSanitizer;
 
     /**
      * Tool function to read a file from the repository workspace.
@@ -47,7 +49,7 @@ public class RepositoryTools {
                     return errorReadFile("Repository workspace not available");
                 }
                 
-                Path workspacePath = Paths.get(repository.getLocalPath());
+                Path workspacePath = Paths.get(repository.getLocalPath()).toRealPath();
                 Path requestedPath = workspacePath.resolve(request.filePath()).normalize();
                 
                 // Security check: ensure the requested path is within the workspace
@@ -60,15 +62,20 @@ public class RepositoryTools {
                 if (!Files.exists(requestedPath) || !Files.isRegularFile(requestedPath)) {
                     return errorReadFile("File not found or not accessible");
                 }
+                requestedPath = requestedPath.toRealPath();
+                if (!requestedPath.startsWith(workspacePath)) {
+                    log.warn("Symlink traversal attempt detected: {} outside workspace {}", requestedPath, workspacePath);
+                    return errorReadFile("Access denied: path outside repository workspace");
+                }
                 
                 // Security check: prevent reading sensitive files
                 String fileName = requestedPath.getFileName().toString().toLowerCase();
-                if (fileName.contains(".env") || fileName.contains("secret") || fileName.contains("key")) {
+                if (contentSanitizer.isSensitiveFileName(fileName)) {
                     log.warn("Attempt to read sensitive file blocked: {}", requestedPath);
                     return errorReadFile("Access denied: sensitive file");
                 }
                 
-                String content = Files.readString(requestedPath);
+                String content = contentSanitizer.sanitizeForLlm(Files.readString(requestedPath));
                 return successReadFile(content, requestedPath.toString());
                 
             } catch (ResourceNotFoundException e) {
@@ -99,7 +106,7 @@ public class RepositoryTools {
                     return errorListFiles("Repository workspace not available");
                 }
                 
-                Path workspacePath = Paths.get(repository.getLocalPath());
+                Path workspacePath = Paths.get(repository.getLocalPath()).toRealPath();
                 Path requestedPath = workspacePath.resolve(request.directoryPath() != null ? request.directoryPath() : "").normalize();
                 
                 // Security check: ensure the requested path is within the workspace
@@ -111,6 +118,11 @@ public class RepositoryTools {
                 // Security check: ensure the directory exists and is readable
                 if (!Files.exists(requestedPath) || !Files.isDirectory(requestedPath)) {
                     return errorListFiles("Directory not found or not accessible");
+                }
+                requestedPath = requestedPath.toRealPath();
+                if (!requestedPath.startsWith(workspacePath)) {
+                    log.warn("Symlink traversal attempt detected: {} outside workspace {}", requestedPath, workspacePath);
+                    return errorListFiles("Access denied: path outside repository workspace");
                 }
                 
                 // List files with basic information

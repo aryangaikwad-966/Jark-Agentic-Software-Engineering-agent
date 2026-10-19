@@ -2,8 +2,8 @@
 
 ## Current Project Status
 
-**Current Phase:** Phase 24 — Security Hardening
-**Current Task:** VXC-230 — System Security Hardening
+**Current Phase:** Phase 25 — Frontend
+**Current Task:** VXC-240 — UI Foundation and Repository Overview
 **Current Task Status:** NOT STARTED
 
 ### Completed Tasks
@@ -32,17 +32,18 @@
 - [x] VXC-200 — State Preservation and Recovery
 - [x] VXC-210 — Report Generation
 - [x] VXC-220 — Telemetry and Metrics
+- [x] VXC-230 — System Security Hardening
 
 ### In Progress Tasks
 - None
 
 ### Next Tasks
-- [ ] VXC-230 — System Security Hardening
+- [ ] VXC-240 — UI Foundation and Repository Overview
 - [ ] VXC-095 — Focused MCP Server (OPTIONAL)
 
 ### Overall Progress
-**23 / 28 phases completed** (Phases 0–23 complete)
-**25 / 34 VXC tasks completed** (73.5% complete)
+**24 / 28 phases completed** (Phases 0–24 complete)
+**26 / 34 VXC tasks completed** (76.5% complete)
 **Phase 0:** 2/2 tasks complete (100%)  
 **Phase 1:** 2/2 tasks complete (100%)  
 **Phase 2:** 1/1 tasks complete (100%)  
@@ -1129,7 +1130,7 @@ CI:
 
 ## Phase 24 — Security Hardening
 
-### [ ] VXC-230 — System Security Hardening
+### [x] VXC-230 — System Security Hardening
 Priority: P0
 Phase: 24
 Dependencies: VXC-001

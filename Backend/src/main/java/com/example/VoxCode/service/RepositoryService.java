@@ -103,6 +103,12 @@ public class RepositoryService {
         return RepositoryResponse.fromEntity(repo);
     }
 
+    /** Returns a repository only when it belongs to the authenticated user. */
+    @Transactional(readOnly = true)
+    public RepositoryResponse getRepository(Long id, Long userId) {
+        return RepositoryResponse.fromEntity(findOwnedRepository(id, userId));
+    }
+
     @Transactional(readOnly = true)
     public List<RepositoryResponse> listUserRepositories(Long userId) {
         return repositoryRepository.findByUserId(userId).stream()
@@ -124,6 +130,17 @@ public class RepositoryService {
         return status;
     }
 
+    @Transactional(readOnly = true)
+    public RepositoryStatusResponse getRepositoryStatus(Long id, Long userId) {
+        CodeRepository repo = findOwnedRepository(id, userId);
+        RepositoryStatusResponse status = new RepositoryStatusResponse();
+        status.setId(repo.getId());
+        status.setName(repo.getName());
+        status.setStatus(repo.getStatus());
+        status.setLastUpdatedAt(repo.getUpdatedAt());
+        return status;
+    }
+
     @Transactional
     public void deleteRepository(Long id) {
         CodeRepository repo = repositoryRepository.findById(id)
@@ -134,6 +151,25 @@ public class RepositoryService {
         }
         
         repositoryRepository.delete(repo);
+    }
+
+    @Transactional
+    public void deleteRepository(Long id, Long userId) {
+        CodeRepository repo = findOwnedRepository(id, userId);
+        if (repo.getLocalPath() != null) {
+            workspaceManager.cleanupWorkspace(Path.of(repo.getLocalPath()));
+        }
+        repositoryRepository.delete(repo);
+    }
+
+    private CodeRepository findOwnedRepository(Long id, Long userId) {
+        CodeRepository repository = repositoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Repository", id));
+        if (repository.getUser() == null || !userId.equals(repository.getUser().getId())) {
+            // Do not disclose the existence of another user's repository.
+            throw new ResourceNotFoundException("Repository", id);
+        }
+        return repository;
     }
 
     private String extractNameFromUrl(String url) {

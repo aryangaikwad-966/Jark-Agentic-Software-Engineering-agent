@@ -2,6 +2,7 @@ package com.example.VoxCode.service.rag;
 
 import com.example.VoxCode.dto.rag.CodeChunk;
 import com.example.VoxCode.dto.rag.DocumentType;
+import com.example.VoxCode.security.RepositoryContentSanitizer;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -15,6 +16,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -47,11 +49,18 @@ public class DocumentParserService {
     private static final int DEFAULT_OVERLAP_LINES = 8;
 
     private final JavaParser javaParser;
+    private final RepositoryContentSanitizer contentSanitizer;
 
     public DocumentParserService() {
+        this(new RepositoryContentSanitizer());
+    }
+
+    @Autowired
+    public DocumentParserService(RepositoryContentSanitizer contentSanitizer) {
         ParserConfiguration config = new ParserConfiguration();
         config.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_21);
         this.javaParser = new JavaParser(config);
+        this.contentSanitizer = contentSanitizer;
     }
 
     /**
@@ -108,7 +117,7 @@ public class DocumentParserService {
 
     private List<CodeChunk> parseJavaFile(Long repositoryId, String relativePath, Path file) throws IOException {
         List<CodeChunk> chunks = new ArrayList<>();
-        String content = Files.readString(file, StandardCharsets.UTF_8);
+        String content = sanitize(file, Files.readString(file, StandardCharsets.UTF_8));
         boolean isTest = relativePath.contains("/test/") || file.getFileName().toString().endsWith("Test.java");
         DocumentType docType = isTest ? DocumentType.TEST : DocumentType.SOURCE_CODE;
 
@@ -179,7 +188,7 @@ public class DocumentParserService {
     }
 
     private List<CodeChunk> parseMarkdownFile(Long repositoryId, String relativePath, Path file) throws IOException {
-        List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
+        List<String> lines = List.of(sanitize(file, Files.readString(file, StandardCharsets.UTF_8)).split("\\r?\\n", -1));
         List<CodeChunk> chunks = new ArrayList<>();
 
         int sectionStart = 1;
@@ -215,12 +224,12 @@ public class DocumentParserService {
     }
 
     private List<CodeChunk> parseConfigFile(Long repositoryId, String relativePath, Path file) throws IOException {
-        String content = Files.readString(file, StandardCharsets.UTF_8);
+        String content = sanitize(file, Files.readString(file, StandardCharsets.UTF_8));
         return chunkTextByLines(repositoryId, relativePath, content, DocumentType.CONFIGURATION, null, null, "config");
     }
 
     private List<CodeChunk> parseGenericTextFile(Long repositoryId, String relativePath, Path file) throws IOException {
-        String content = Files.readString(file, StandardCharsets.UTF_8);
+        String content = sanitize(file, Files.readString(file, StandardCharsets.UTF_8));
         return chunkTextByLines(repositoryId, relativePath, content, DocumentType.DOCUMENTATION, null, null, "text");
     }
 
@@ -308,6 +317,13 @@ public class DocumentParserService {
         return fileName.endsWith(".yml") || fileName.endsWith(".yaml")
                 || fileName.endsWith(".properties") || fileName.equals("pom.xml")
                 || fileName.endsWith(".json") || fileName.endsWith(".xml");
+    }
+
+    private String sanitize(Path file, String content) {
+        if (contentSanitizer.isSensitiveFileName(file.getFileName().toString())) {
+            return "[REDACTED_SENSITIVE_FILE]";
+        }
+        return contentSanitizer.sanitizeForLlm(content);
     }
 
     private String generateId(Long repoId, String filePath, int startLine, String content) {
