@@ -2,8 +2,8 @@
 
 ## Current Project Status
 
-**Current Phase:** Phase 25 — Frontend
-**Current Task:** VXC-240 — UI Foundation and Repository Overview
+**Current Phase:** Phase 10 — MCP Tool Interface (resumed)
+**Current Task:** VXC-095 — Focused MCP Server (OPTIONAL)
 **Current Task Status:** NOT STARTED
 
 ### Completed Tasks
@@ -38,8 +38,14 @@
 - None
 
 ### Next Tasks
-- [ ] VXC-240 — UI Foundation and Repository Overview
 - [ ] VXC-095 — Focused MCP Server (OPTIONAL)
+- [ ] VXC-240 — UI Foundation and Repository Overview
+- [ ] VXC-241 — Investigation and Trace UI
+- [ ] VXC-242 — Planning and Approval UI
+- [ ] VXC-243 — IDE-like Remediation & Verification UI
+- [ ] VXC-250 — Complete E2E Flows (after VXC-243)
+- [ ] VXC-260 — Final Benchmark Execution (after VXC-250)
+- [ ] VXC-270 — Final Polish and Documentation (after VXC-260)
 
 ### Overall Progress
 **24 / 28 phases completed** (Phases 0–24 complete)
