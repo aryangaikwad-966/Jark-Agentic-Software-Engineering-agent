@@ -1,4 +1,4 @@
-# VoxCode — Agentic Java RAG Intelligence
+# Jark - Agentic Software Engineering agent
 
 VoxCode is an Agentic AI system for Java/Spring repository intelligence that uses AST analysis, dependency analysis, and RAG to investigate engineering problems, gather and validate evidence, create engineering plans, perform human-approved bounded remediation, and verify or roll back changes.
 
