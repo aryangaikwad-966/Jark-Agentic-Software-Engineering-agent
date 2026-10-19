@@ -32,6 +32,7 @@ public class RemediationService {
     private final AstAnalysisService astAnalysisService;
     private final ObjectMapper objectMapper;
     private final RollbackService rollbackService;
+    private final MetricsService metricsService;
 
     /**
      * Transformation strategy constants.
@@ -59,8 +60,11 @@ public class RemediationService {
      */
     @Transactional
     public Remediation applyRemediation(Long planId, Long approvalId, String workspacePath) {
-        log.info("Applying remediation for planId={}, approvalId={}, workspace={}", 
+        log.info("Applying remediation for planId={}, approvalId={}, workspace={}",
                 planId, approvalId, workspacePath);
+        metricsService.recordRemediation("STARTED", "in_progress");
+
+        long startTime = System.currentTimeMillis();
 
         // Verify approval first
         Approval approval = approvalService.verifyApprovalForRemediation(
@@ -102,6 +106,10 @@ public class RemediationService {
 
             log.info("Remediation completed successfully for plan ID {}", planId);
 
+            long duration = System.currentTimeMillis() - startTime;
+            metricsService.recordRemediationDuration(savedRemediation.getTransformationStrategy(), "COMPLETED", duration);
+            metricsService.recordRemediation(savedRemediation.getTransformationStrategy(), "COMPLETED");
+
         } catch (Exception e) {
             log.error("Remediation failed for plan ID {}: {}", planId, e.getMessage(), e);
             savedRemediation.markFailed(e.getMessage());
@@ -109,6 +117,11 @@ public class RemediationService {
             if (rollbackService != null) {
                 rollbackService.rollbackWorkspace(savedRemediation.getId(), RollbackService.TRIGGER_SCOPE_VIOLATION);
             }
+
+            long duration = System.currentTimeMillis() - startTime;
+            metricsService.recordRemediationDuration(savedRemediation.getTransformationStrategy(), "FAILED", duration);
+            metricsService.recordRemediation(savedRemediation.getTransformationStrategy(), "FAILED");
+
             throw new IllegalStateException("Remediation failed: " + e.getMessage(), e);
         }
 
