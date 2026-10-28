@@ -1,9 +1,9 @@
-# VoxCode — Product Requirements Document (PRD)
+# Jark — Product Requirements Document (PRD)
 
 **Version:** 1.0
 **Status:** 🔒 Final / Locked
-**Product:** VoxCode
-**Full Name:** **VoxCode — Agentic Java/Spring Code Review & Remediation Agent**
+**Product:** Jark
+**Full Name:** **Jark — Agentic Java/Spring Code Review & Remediation Agent**
 **Product Type:** Agentic AI Software Engineering Platform
 **Primary Domain:** Java/Spring repositories
 **Development Horizon:** 1 year
@@ -15,11 +15,11 @@
 
 ## 1.1 Product Name
 
-**VoxCode**
+**Jark**
 
 ## 1.2 Full Name
 
-> **VoxCode — Agentic Java/Spring Code Review & Remediation Agent**
+> **Jark — Agentic Java/Spring Code Review & Remediation Agent**
 
 The name communicates:
 
@@ -33,7 +33,7 @@ The name communicates:
 
 # 2. Product Definition
 
-> **VoxCode is an evidence-driven Agentic AI software engineering agent that understands Java/Spring repositories, investigates issues using AST, dependency graphs and supporting RAG, produces evidence-backed findings, plans bounded remediation, obtains human approval, applies targeted fixes, verifies them in an isolated environment, and generates an engineering report.**
+> **Jark is an evidence-driven Agentic AI software engineering agent that understands Java/Spring repositories, investigates issues using AST, dependency graphs and supporting RAG, produces evidence-backed findings, plans bounded remediation, obtains human approval, applies targeted fixes, verifies them in an isolated environment, and generates an engineering report.**
 
 The complete product philosophy is:
 
@@ -41,13 +41,13 @@ The complete product philosophy is:
 
 The central principle is:
 
-> **AI-generated decisions are not considered trustworthy merely because the LLM is confident. VoxCode must provide repository evidence and executable verification.**
+> **AI-generated decisions are not considered trustworthy merely because the LLM is confident. Jark must provide repository evidence and executable verification.**
 
 ---
 
 # 3. Vision
 
-VoxCode demonstrates a production-oriented Agentic AI system by combining:
+Jark demonstrates a production-oriented Agentic AI system by combining:
 
 * Java/Spring backend engineering
 * Repository intelligence
@@ -65,7 +65,7 @@ VoxCode demonstrates a production-oriented Agentic AI system by combining:
 * Evaluation
 * Observability
 
-VoxCode is **not** intended to become a generic Cursor, Devin, or OpenHands replacement.
+Jark is **not** intended to become a generic Cursor, Devin, or OpenHands replacement.
 
 Its specialization is:
 
@@ -89,7 +89,7 @@ LLM
 Answer / Code
 ```
 
-VoxCode:
+Jark:
 
 ```text
 User Request
@@ -141,7 +141,7 @@ Java/Spring repositories contain complex relationships between:
 
 An LLM working only with text can miss these relationships.
 
-VoxCode addresses:
+Jark addresses:
 
 ### 5.1 Repository Complexity
 
@@ -171,11 +171,11 @@ Generated code should not automatically be considered correct.
 
 # 6. Product Strategy
 
-VoxCode has **two capability layers**.
+Jark has **two capability layers**.
 
 ## Primary Layer — Investigation + Evidence + Verification
 
-This is the heart of VoxCode.
+This is the heart of Jark.
 
 ```text
 AST
@@ -288,7 +288,7 @@ History
 
 The user connects a GitHub repository or uploads repository content.
 
-VoxCode:
+Jark:
 
 1. Loads the repository.
 2. Detects Java/Spring structure.
@@ -306,7 +306,7 @@ Example:
 
 > "How does authentication work?"
 
-VoxCode investigates relevant:
+Jark investigates relevant:
 
 ```text
 Controller
@@ -352,7 +352,7 @@ Example:
 
 > "Fix the missing authorization."
 
-VoxCode:
+Jark:
 
 ```text
 Finding
@@ -372,7 +372,7 @@ Result
 
 ## UC-05 — Verify Modification
 
-VoxCode executes the modified repository in an isolated environment.
+Jark executes the modified repository in an isolated environment.
 
 It can perform:
 
@@ -389,7 +389,7 @@ The result determines whether the change is accepted, repaired, or rolled back.
 
 This is **non-negotiable**.
 
-VoxCode must not simply execute:
+Jark must not simply execute:
 
 ```text
 AST → RAG → LLM → Report
@@ -471,7 +471,7 @@ This prevents the agent from being merely a fixed workflow with an LLM attached.
 
 # 11. Repository Intelligence
 
-VoxCode uses three complementary sources.
+Jark uses three complementary sources.
 
 ## 11.1 AST Intelligence
 
@@ -526,7 +526,7 @@ It enables:
 
 ## 11.3 Hybrid Repository-Aware RAG
 
-RAG is an important part of VoxCode, but it is **not the primary structural understanding mechanism**.
+RAG is an important part of Jark, but it is **not the primary structural understanding mechanism**.
 
 RAG implements deep hybrid retrieval for repository semantic context, NOT just chunk→embed→top-K.
 
@@ -597,7 +597,7 @@ RAG must NEVER replace AST or dependency analysis for structural claims.
 
 RAG must demonstrate measurable value through comprehensive metrics and ablation study.
 
-VoxCode performs an ablation study:
+Jark performs an ablation study:
 
 ```text
 Baseline: Agent + AST + Graph
@@ -629,7 +629,7 @@ Do not add retrieval technologies merely for resume keywords. The evaluation mus
 
 # 13. Supported Issue Classes
 
-VoxCode does not attempt to detect every possible software problem.
+Jark does not attempt to detect every possible software problem.
 
 Initial focus:
 
@@ -710,7 +710,7 @@ Require appropriate authorization.
 
 The objective is:
 
-> **A developer must be able to understand why VoxCode reached its conclusion.**
+> **A developer must be able to understand why Jark reached its conclusion.**
 
 ---
 
@@ -742,7 +742,7 @@ This directly helps control false positives.
 
 # 16. Engineering Plan
 
-For a validated issue, VoxCode generates:
+For a validated issue, Jark generates:
 
 * Objective
 * Problem summary
@@ -802,7 +802,7 @@ The agent must not silently modify the repository.
 
 # 18. Bounded Remediation
 
-VoxCode supports targeted remediation rather than unrestricted autonomous coding.
+Jark supports targeted remediation rather than unrestricted autonomous coding.
 
 Supported fixes should remain within explicitly supported issue classes.
 
@@ -837,7 +837,7 @@ Prefer:
 
 # 19. Live Agent Modification Experience
 
-VoxCode should provide a **live agent workspace similar to a developer IDE experience**, while remaining specialized rather than becoming a complete IDE replacement.
+Jark should provide a **live agent workspace similar to a developer IDE experience**, while remaining specialized rather than becoming a complete IDE replacement.
 
 During execution the user can see:
 
@@ -875,7 +875,7 @@ The user should never feel that the system disappeared behind a chat box.
 
 # 20. Verification — Core Capability
 
-Verification is one of VoxCode's strongest engineering capabilities.
+Verification is one of Jark's strongest engineering capabilities.
 
 After an approved modification:
 
@@ -917,7 +917,7 @@ If verification still fails:
 Rollback
 ```
 
-VoxCode must never claim:
+Jark must never claim:
 
 > "Fix successful"
 
@@ -979,7 +979,7 @@ No infinite autonomous repair loops are permitted.
 
 # 23. Rollback
 
-Before remediation, VoxCode preserves the original state.
+Before remediation, Jark preserves the original state.
 
 If the modification cannot be successfully verified:
 
@@ -1027,7 +1027,7 @@ Every investigation/remediation should produce an engineering report.
 Example:
 
 ```text
-VOXCODE ENGINEERING REPORT
+JARK ENGINEERING REPORT
 
 Repository:
 payment-service
@@ -1090,7 +1090,7 @@ Repository Capability
 ### MCP Requirements
 
 * Implement a focused MCP server/interface
-* Expose only useful VoxCode capabilities/tools
+* Expose only useful Jark capabilities/tools
 * MCP is an interoperability/tool interface, NOT a separate architecture
 * Do NOT build a large MCP ecosystem
 * Do NOT create dozens of unnecessary servers
@@ -1178,7 +1178,7 @@ Benchmark development begins early in the project rather than being postponed un
 
 # 28. Observability
 
-VoxCode records:
+Jark records:
 
 * Agent decisions
 * Tool calls
@@ -1200,7 +1200,7 @@ The objective is to make the agent inspectable rather than a black box.
 
 # 29. Security Requirements
 
-VoxCode must protect both repositories and execution environments.
+Jark must protect both repositories and execution environments.
 
 Required areas:
 
@@ -1218,7 +1218,7 @@ Required areas:
 
 # 30. UI/UX Direction
 
-The supplied VoxCode visual reference is the visual source of truth.
+The supplied Jark visual reference is the visual source of truth.
 
 ### Visual language
 
@@ -1468,7 +1468,7 @@ Avoid unnecessary configuration.
 ## Frontend
 
 * React-based UI
-* VoxCode visual reference
+* Jark visual reference
 
 ## Agent Tool Architecture
 
@@ -1649,7 +1649,7 @@ Remediation should be developed after the core investigation/evidence/verificati
 
 # 36. Success Criteria
 
-VoxCode is successful when it can:
+Jark is successful when it can:
 
 ## Repository
 
@@ -1706,7 +1706,7 @@ VoxCode is successful when it can:
 # 37. Final Product Architecture
 
 ```text
-                         VOXCODE
+                         JARK
                             │
                       User Request
                             │
@@ -1798,11 +1798,11 @@ VoxCode is successful when it can:
 
 ### Name
 
-**VoxCode**
+**Jark**
 
 ### Full Name
 
-> **VoxCode — Agentic Java/Spring Code Review & Remediation Agent**
+> **Jark — Agentic Java/Spring Code Review & Remediation Agent**
 
 ### Product Type
 
@@ -1857,13 +1857,13 @@ VoxCode is successful when it can:
 
 # 39. Final One-Sentence Definition
 
-> **VoxCode is an Agentic Java/Spring Code Review & Remediation Agent that combines AST-based repository intelligence, dependency graphs, supporting RAG, adaptive tool-using investigation, evidence-backed findings, human-approved remediation, and isolated verification to turn AI-generated software-engineering decisions into measurable, verifiable outcomes.**
+> **Jark is an Agentic Java/Spring Code Review & Remediation Agent that combines AST-based repository intelligence, dependency graphs, supporting RAG, adaptive tool-using investigation, evidence-backed findings, human-approved remediation, and isolated verification to turn AI-generated software-engineering decisions into measurable, verifiable outcomes.**
 
 ---
 
 # 🔒 FINAL LOCK
 
-**VoxCode is a one-year complete project, not a multi-year roadmap.**
+**Jark is a one-year complete project, not a multi-year roadmap.**
 
 The final philosophy is:
 

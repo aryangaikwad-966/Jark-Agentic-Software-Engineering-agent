@@ -1,9 +1,9 @@
-# VoxCode Implementation TODO
+# Jark Implementation TODO
 
 ## Current Project Status
 
-**Current Phase:** Phase 10 — MCP Tool Interface (resumed)
-**Current Task:** VXC-095 — Focused MCP Server (OPTIONAL)
+**Current Phase:** Phase 25 — Frontend
+**Current Task:** VXC-240 — UI Foundation and Repository Overview
 **Current Task Status:** NOT STARTED
 
 ### Completed Tasks
@@ -19,6 +19,7 @@
 - [x] VXC-070 — RAG Pipeline Setup
 - [x] VXC-080 — Retrieval Benchmarking
 - [x] VXC-090 — Core Agent Tools
+- [x] VXC-095 — Focused MCP Server (OPTIONAL)
 - [x] VXC-100 — Core Investigation Loop
 - [x] VXC-110 — Agent Benchmark
 - [x] VXC-120 — Structured Evidence Model
@@ -38,7 +39,6 @@
 - None
 
 ### Next Tasks
-- [ ] VXC-095 — Focused MCP Server (OPTIONAL)
 - [ ] VXC-240 — UI Foundation and Repository Overview
 - [ ] VXC-241 — Investigation and Trace UI
 - [ ] VXC-242 — Planning and Approval UI
@@ -49,7 +49,7 @@
 
 ### Overall Progress
 **24 / 28 phases completed** (Phases 0–24 complete)
-**26 / 34 VXC tasks completed** (76.5% complete)
+**27 / 34 VXC tasks completed** (79.4% complete)
 **Phase 0:** 2/2 tasks complete (100%)  
 **Phase 1:** 2/2 tasks complete (100%)  
 **Phase 2:** 1/1 tasks complete (100%)  
@@ -60,7 +60,7 @@
 **Phase 7:** 1/1 tasks complete (100%)
 **Phase 8:** 1/1 tasks complete (100%)
 **Phase 9:** 1/1 tasks complete (100%)
-**Phase 10:** 0/1 tasks complete (0%) — OPTIONAL, deferred
+**Phase 10:** 1/1 tasks complete (100%) — OPTIONAL
 **Phase 11:** 1/1 tasks complete (100%)
 **Phase 12:** 1/1 tasks complete (100%)
 **Phase 13:** 1/1 tasks complete (100%)
@@ -149,9 +149,9 @@ The next task is determined from the existing dependency order in TODO.md. Do NO
 
 ## Project Identity
 
-**VoxCode — Agentic Java RAG Code Intelligence**
+**Jark — Agentic Java RAG Code Intelligence**
 
-VoxCode is an Agentic Java RAG intelligence system that investigates Java/Spring repositories using AST, dependency analysis and hybrid retrieval, produces evidence-backed engineering plans, performs human-approved bounded code changes, and verifies or rolls back those changes.
+Jark is an Agentic Java RAG intelligence system that investigates Java/Spring repositories using AST, dependency analysis and hybrid retrieval, produces evidence-backed engineering plans, performs human-approved bounded code changes, and verifies or rolls back those changes.
 
 **Core Principle:**
 Understand → Retrieve → Investigate → Prove → Plan → Act → Verify
@@ -187,23 +187,23 @@ Repository → Repository Intelligence (AST + Dependency Graph + Repository Inde
 - **Testing:** JUnit 5, Mockito, Testcontainers
 
 **TIER 5 — OPTIONAL / ONLY IF TIME REMAINS**
-- **MCP:** Focused MCP server/interface exposing only useful VoxCode capabilities/tools (repository inspection, AST analysis, dependency analysis, retrieval, build, test, verification) - NOT a separate architecture or ecosystem
+- **MCP:** Focused MCP server/interface exposing only useful Jark capabilities/tools (repository inspection, AST analysis, dependency analysis, retrieval, build, test, verification) - NOT a separate architecture or ecosystem
 
 **EXCLUDED TECHNOLOGIES**
 - Redis, Kafka, Kubernetes, Microservices, Distributed service architecture, Complex caching, Complex messaging infrastructure, Custom distributed workflow engines, Huge MCP ecosystem, Multi-agent swarm architecture, Foundation-model training, Custom LLM, Generic multi-language support, Full IDE replacement, Unlimited autonomous coding, Complex voice infrastructure, Arbitrary feature generation
 
 ## Project Rules
-- **Scope Protection:** VoxCode is a one-year bounded project. No feature creep. No multi-agent architecture (one primary agent only), no general-purpose coding assistants, no graph RAG, Kubernetes, Kafka, Redis, microservices, distributed service architecture, complex caching, complex messaging infrastructure, custom distributed workflow engines, huge MCP ecosystem, foundation-model training, custom LLM, generic multi-language support, full IDE replacement, unlimited autonomous coding, complex voice infrastructure, or arbitrary feature generation without absolute justification.
+- **Scope Protection:** Jark is a one-year bounded project. No feature creep. No multi-agent architecture (one primary agent only), no general-purpose coding assistants, no graph RAG, Kubernetes, Kafka, Redis, microservices, distributed service architecture, complex caching, complex messaging infrastructure, custom distributed workflow engines, huge MCP ecosystem, foundation-model training, custom LLM, generic multi-language support, full IDE replacement, unlimited autonomous coding, complex voice infrastructure, or arbitrary feature generation without absolute justification.
 - **Primary Capabilities:** Investigation and Bounded Remediation are EQUAL, first-class capabilities. Investigation discovers, analyzes and proves repository problems. Remediation applies targeted fixes to confirmed findings.
 - **Governing Principle:** Evidence and verification govern remediation. The LLM must NEVER be treated as the source of truth. No remediation is accepted without evidence and verification.
-- **Not a Feature Generator:** VoxCode applies safe, targeted fixes for confirmed findings. It does NOT generate arbitrary application features (e.g., "Build an authentication system"). Requests for new features must explicitly be classified as OUT OF SCOPE.
+- **Not a Feature Generator:** Jark applies safe, targeted fixes for confirmed findings. It does NOT generate arbitrary application features (e.g., "Build an authentication system"). Requests for new features must explicitly be classified as OUT OF SCOPE.
 - **Evidence Over Generation:** LLM reasoning must always be supported by deterministic repository intelligence (AST, Graph) and executable verification. RAG must NOT replace AST or graph analysis for structural claims.
 - **Agent Traces:** The agent must leave a clear persisted decision trace for investigation (Request → Classification → Hypothesis → Tool → Observation → Evidence → Decision → Finding) and remediation (Finding → Plan → Approval → Transformation → Diff → Verification → Repair → Accept/Rollback). Do NOT expose hidden chain-of-thought.
 - **Human Approval:** No code modification may occur without explicit human approval of an engineering plan. Investigation and read-only analysis may occur before approval.
 - **Verification Criteria:** A generated patch is NEVER considered successful merely because it looks correct or builds. Remediation is successful ONLY when: intended files were modified, no unauthorized files were modified, diff matches approved plan, project builds successfully, tests pass, static analysis passes, and no unexpected modifications are detected. 
 - **Rollback:** Failed remediation must be recoverable through automated rollback. Rollback triggers: verification permanently fails, repair budget is exhausted, unauthorized modifications detected, or remediation violates the approved scope.
 - **Database as Supporting Infrastructure:** MySQL/JPA/Hibernate are supporting infrastructure for Agentic AI state persistence, NOT a major project focus. No complex database optimization, advanced SQL engineering, database sharding, complicated caching architecture, or unnecessary database abstractions.
-- **MCP as Focused Tool Interface:** MCP is a focused interoperability boundary for selected VoxCode tools (repository inspection, AST analysis, dependency analysis, retrieval, build, test, verification). Do NOT create multiple MCP servers, MCP microservices, dozens of MCP tools, or an MCP ecosystem.
+- **MCP as Focused Tool Interface:** MCP is a focused interoperability boundary for selected Jark tools (repository inspection, AST analysis, dependency analysis, retrieval, build, test, verification). Do NOT create multiple MCP servers, MCP microservices, dozens of MCP tools, or an MCP ecosystem.
 - **Technology Priority Rule:** Every technology must have a clear role in Retrieve → Investigate → Decide → Act → Verify → Evaluate. If a technology does not strengthen this loop, it should NOT be added.
 
 ## Remediation Scope
@@ -226,10 +226,10 @@ Repository → Repository Intelligence (AST + Dependency Graph + Repository Inde
 - Unrestricted autonomous coding
 
 ## User Request Classification
-Before investigation or remediation begins, VoxCode must classify every developer request as exactly one of:
+Before investigation or remediation begins, Jark must classify every developer request as exactly one of:
 - `INVESTIGATE`: The user wants explanation/investigation only. Stops after report.
 - `REMEDIATE`: The user identifies a specific issue and wants a bounded fix. May skip discovery, but MUST still validate and create a CONFIRMED finding before remediation.
-- `INVESTIGATE_AND_REMEDIATE`: The user wants VoxCode to investigate and then fix it. Follows complete lifecycle.
+- `INVESTIGATE_AND_REMEDIATE`: The user wants Jark to investigate and then fix it. Follows complete lifecycle.
 - `OUT_OF_SCOPE`: Requires arbitrary feature generation, large-scale dev, or unrestricted coding. Must be explicitly rejected. Stops after classification.
 
 ## Architecture Invariants
@@ -250,8 +250,8 @@ Every task is only "Done" when:
 - For AI features, deterministic fallback and error handling are present.
 - Any architectural decisions are documented in an ADR.
 
-## VoxCode Product Development Workflow
-This describes the phased development approach for building the VoxCode software itself. See "Cross-Cutting Requirements — Professional Git & GitHub Development Workflow" for the Git/GitHub practices developers must follow while implementing these phases.
+## Jark Product Development Workflow
+This describes the phased development approach for building the Jark software itself. See "Cross-Cutting Requirements — Professional Git & GitHub Development Workflow" for the Git/GitHub practices developers must follow while implementing these phases.
 
 1. Start with foundation and repository ingestion.
 2. Build intelligence layers (AST, Graph, Repository Index).
@@ -424,7 +424,7 @@ Phase: 3
 Dependencies: VXC-011
 
 Goal:
-Allow VoxCode to ingest and validate target Java/Spring repositories.
+Allow Jark to ingest and validate target Java/Spring repositories.
 
 Tasks:
 - Implement `RepositoryService` for handling local and Git-based repositories.
@@ -650,7 +650,7 @@ CI:
 
 ## Phase 10 — MCP Tool Interface
 
-### [ ] VXC-095 — Focused MCP Server (OPTIONAL)
+### [x] VXC-095 — Focused MCP Server (OPTIONAL)
 Priority: P2
 Phase: 10
 Dependencies: VXC-090
@@ -659,7 +659,7 @@ Goal:
 Implement a focused MCP interface for tool interoperability. MCP is a tool interface, NOT a separate architecture. This is OPTIONAL and should only be implemented if time remains after core Agentic AI, RAG, and Verification capabilities are complete.
 
 Tasks:
-- Implement a focused MCP server exposing only useful VoxCode capabilities.
+- Implement a focused MCP server exposing only useful Jark capabilities.
 - Define MCP tools for:
   - Repository search
   - File inspection
@@ -677,13 +677,26 @@ Deliverables:
 - Focused MCP server with bounded tool interface.
 
 Definition of Done:
-- MCP server exposes defined tools safely and integrates with VoxCode's agent tools layer without creating architectural bloat.
+- MCP server exposes defined tools safely and integrates with Jark's agent tools layer without creating architectural bloat.
 
 Tests:
 - Integration tests for MCP tool invocation.
 
 CI:
 - Included.
+
+**Implementation Summary:**
+- Expanded McpServerConfig to expose 12 focused MCP tools (up from 2)
+- Added 4 AST analysis tools: ast_find_class, ast_find_method, ast_find_annotation, ast_find_method_annotation
+- Added 4 dependency analysis tools: graph_find_dependencies, graph_find_dependents, graph_find_callers, graph_find_callees
+- Added 2 semantic retrieval tools: rag_search_semantic_context, rag_assemble_context
+- Kept existing 2 repository tools: repository_read_file, repository_list_files
+- Note: Build, test, and verification tools remain internal to Jark's approval-gated flows (not exposed via MCP)
+- All MCP tools enforce repository ownership authorization via authenticated context
+- Strict input schemas with repositoryId validation, required parameters, and no additional properties
+- Integrated with existing AstTools, GraphTools, RagTools, and RepositoryTools
+- Created 12 unit tests for MCP tool schema validation
+- All MCP tests passing successfully
 
 ---
 
@@ -921,7 +934,7 @@ Deliverables:
 - `ExecutionSandboxService`.
 
 Definition of Done:
-- VoxCode can spawn a container, safely copy the codebase, execute `java -version` inside it under strict resource limits, and destroy the container.
+- Jark can spawn a container, safely copy the codebase, execute `java -version` inside it under strict resource limits, and destroy the container.
 
 Tests:
 - Sandbox integration tests checking limits and execution.
@@ -1032,7 +1045,7 @@ Tasks:
 - Created RollbackService with comprehensive state preservation and recovery
 - Implemented workspace snapshot creation with SHA-256 checksums for all files
 - Captured Git commit SHA and branch information when available
-- Stored snapshots in configurable base directory (/tmp/voxcode/snapshots by default)
+- Stored snapshots in configurable base directory (/tmp/jark/snapshots by default)
 - Implemented rollback trigger detection for:
   - Unauthorized modifications (unauthorized files, unexpected modifications)
   - Scope violations (diff mismatch, remediation outside scope, scope expansion rejected)
@@ -1214,7 +1227,7 @@ Display execution results natively. Expose Remediation capabilities natively.
 Tasks:
 - Build IDE-like explorer for displaying engineering plans, approvals, proposed diffs, applied diffs, verification status, repair attempts, rollbacks, and the final engineering report.
 - Visualize Repair and Rollback states securely via SSE.
-- Do NOT turn VoxCode into a full IDE replacement (IntelliJ/VS Code). Keep it focused on the remediation flow.
+- Do NOT turn Jark into a full IDE replacement (IntelliJ/VS Code). Keep it focused on the remediation flow.
 
 ---
 
@@ -1286,7 +1299,7 @@ Tasks:
 - Clean up `README.md` with setup instructions, architecture diagrams, and usage examples.
 - Ensure all ADRs (Architecture Decision Records) are up to date.
 - Verify Docker compose starts cleanly on a fresh machine.
-- Prepare a Demo Repository with known issues to demonstrate VoxCode's investigation and bounded remediation capabilities.
+- Prepare a Demo Repository with known issues to demonstrate Jark's investigation and bounded remediation capabilities.
 - Record demo scenarios.
 
 Deliverables:
@@ -1319,7 +1332,7 @@ Deliverables:
 
 ### MCP Integration
 - MCP is a focused tool interface for interoperability, NOT a separate architecture or ecosystem.
-- Implement only useful VoxCode capabilities as MCP tools (repository search, file inspection, AST analysis, dependency analysis, semantic retrieval, build, test, verification).
+- Implement only useful Jark capabilities as MCP tools (repository search, file inspection, AST analysis, dependency analysis, semantic retrieval, build, test, verification).
 - Do NOT create large MCP server ecosystems, dozens of servers, MCP microservices, or MCP-based microservices.
 - Use MCP only where it provides genuine architectural value for tool interoperability.
 - MCP is TIER 5 (OPTIONAL) - only implement if time remains after core Agentic AI, RAG, and Verification capabilities are complete.
@@ -1479,7 +1492,7 @@ GitHub Actions is the project's automated CI/CD system. It validates:
 
 **Important:** GitHub Actions does NOT replace the developer's Git workflow. Developers must run local validation before pushing. CI is a safety net, not a substitute for local testing.
 
-### Developer vs VoxCode Responsibilities
+### Developer vs Jark Responsibilities
 
 These are two separate workflows that must not be confused:
 
@@ -1488,15 +1501,15 @@ These are two separate workflows that must not be confused:
 Developer → Git branch → code implementation → tests → commit → push → Pull Request → CI → review → merge
 ```
 
-**VoxCode Product Workflow:**
+**Jark Product Workflow:**
 ```
 User Request → Classification → Investigation → Evidence → Confirmed Finding → Engineering Plan → Human Approval → Remediation → Verification → Repair/Rollback → Engineering Report
 ```
 
-- The **Developer Workflow** is how humans build and maintain the VoxCode software itself.
-- The **VoxCode Product Workflow** is what the VoxCode software does for its users (analyzing and fixing their code).
+- The **Developer Workflow** is how humans build and maintain the Jark software itself.
+- The **Jark Product Workflow** is what the Jark software does for its users (analyzing and fixing their code).
 
-These workflows are entirely separate concepts. The developer workflow ensures VoxCode is built professionally. The VoxCode product workflow ensures VoxCode provides safe, evidence-driven code remediation to its users.
+These workflows are entirely separate concepts. The developer workflow ensures Jark is built professionally. The Jark product workflow ensures Jark provides safe, evidence-driven code remediation to its users.
 
 ---
 
@@ -1533,9 +1546,9 @@ These workflows are entirely separate concepts. The developer workflow ensures V
 - [ ] Agent can determine evidence is insufficient and request additional retrieval/tool calls.
 - [ ] Agent does not expose hidden chain-of-thought; only structured decision traces are persisted.
 - [ ] MCP is implemented as a focused tool interface, not a separate architecture or ecosystem.
-- [ ] MCP exposes only useful VoxCode capabilities (repository search, file inspection, AST analysis, dependency analysis, semantic retrieval, build, test, verification).
+- [ ] MCP exposes only useful Jark capabilities (repository search, file inspection, AST analysis, dependency analysis, semantic retrieval, build, test, verification).
 - [ ] Intelligence boundaries are respected: AST = structural truth, JGraphT = relationship truth, RAG = semantic/contextual information, Tools = operational truth, Build/tests = behavioral truth.
-- [ ] Project remains one unified VoxCode system with no Kafka/Kubernetes/Redis/microservices/GraphRAG/multi-agent creep.
+- [ ] Project remains one unified Jark system with no Kafka/Kubernetes/Redis/microservices/GraphRAG/multi-agent creep.
 - [ ] Git/GitHub professional workflow is explicit and followed (branches, commits, pushes, PRs, reviews, merges, branch protection).
 - [ ] GitHub Actions validates compilation, unit tests, integration tests, and static analysis.
-- [ ] TODO.md remains the single source of truth for VoxCode specification.
+- [ ] TODO.md remains the single source of truth for Jark specification.

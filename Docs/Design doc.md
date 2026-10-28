@@ -1,19 +1,19 @@
-# VoxCode — Final UI/UX Design Document
+# Jark — Final UI/UX Design Document
 
 **Version:** 1.0
 **Status:** 🔒 Final / Locked
-**Product:** VoxCode
-**Full Name:** **VoxCode — Agentic Java/Spring Code Review & Remediation Agent**
+**Product:** Jark
+**Full Name:** **Jark — Agentic Java/Spring Code Review & Remediation Agent**
 **Design Status:** Final
 **Development Horizon:** 1 year
 
-> **Design Basis:** The supplied VoxCode visual reference is the primary visual inspiration. Functional behavior follows the final PRD.
+> **Design Basis:** The supplied Jark visual reference is the primary visual inspiration. Functional behavior follows the final PRD.
 
 ---
 
 # 1. Design Vision
 
-VoxCode must feel like a **premium AI-native developer workspace**, not a generic chatbot.
+Jark must feel like a **premium AI-native developer workspace**, not a generic chatbot.
 
 The core experience is:
 
@@ -23,7 +23,7 @@ The UI must make the agent's engineering process visible.
 
 The developer should always know:
 
-1. What VoxCode is doing.
+1. What Jark is doing.
 2. Which tools it is using.
 3. What evidence it discovered.
 4. What it believes is wrong.
@@ -36,7 +36,7 @@ The developer should always know:
 
 # 2. Product UX Identity
 
-VoxCode should communicate:
+Jark should communicate:
 
 > **"An engineering agent that investigates your Java/Spring repository, explains its evidence, makes controlled changes, and proves whether those changes actually work."**
 
@@ -52,7 +52,7 @@ The central UI concept is:
 ```text
 Developer
     ↕
-VoxCode Agent
+Jark Agent
     ↕
 Repository
 ```
@@ -61,7 +61,7 @@ Repository
 
 # 3. Design Reference
 
-The supplied VoxCode reference establishes the visual direction:
+The supplied Jark reference establishes the visual direction:
 
 * Dark developer-tool interface
 * Near-black background
@@ -128,7 +128,7 @@ More Evidence Required
 Validation
 ```
 
-This is one of the most important UX elements in VoxCode.
+This is one of the most important UX elements in Jark.
 
 ---
 
@@ -404,7 +404,7 @@ Icons should support the interface rather than dominate it.
 ## Logo
 
 ```text
-VoxCode
+Jark
 ```
 
 Brand treatment:
@@ -415,7 +415,7 @@ Brand treatment:
 Possible logo structure:
 
 ```text
-[code / AI symbol] VoxCode
+[code / AI symbol] Jark
 ```
 
 ## Product Descriptor
@@ -434,7 +434,7 @@ After repository connection:
 
 ```text
 ┌──────────────────────────────────────────────────────────────┐
-│ VoxCode       Repository / Branch                 User       │
+│ Jark       Repository / Branch                 User       │
 ├───────────────┬──────────────────────────────────────────────┤
 │               │                                              │
 │ Overview      │                                              │
@@ -457,7 +457,7 @@ Desktop is the primary experience.
 # 12. Primary Navigation
 
 ```text
-VoxCode
+Jark
 
 Repository
 ├── Overview
@@ -484,7 +484,7 @@ No unnecessary navigation items.
 Immediately communicate the product.
 
 ```text
-                 VoxCode
+                 Jark
 
        Agentic Java/Spring Code
        Review & Remediation Agent
@@ -628,7 +628,7 @@ The overview should expose the three intelligence layers:
 └─────────────────────────────────────────────┘
 ```
 
-The user should understand that VoxCode does not rely only on LLM text retrieval.
+The user should understand that Jark does not rely only on LLM text retrieval.
 
 ### Intelligence Boundaries
 
@@ -646,7 +646,7 @@ The UI should communicate the distinct roles of each intelligence layer:
 └─────────────────────────────────────────────┘
 ```
 
-This helps users understand that VoxCode uses the right tool for the right truth.
+This helps users understand that Jark uses the right tool for the right truth.
 
 ---
 
@@ -658,7 +658,7 @@ The chat should feel like an engineering interface, not a generic chatbot.
 
 > Explain how authentication works in this repository.
 
-### VoxCode
+### Jark
 
 ```text
 Authentication Flow
@@ -683,7 +683,7 @@ Evidence references should be clickable.
 
 # 19. Investigation Workspace
 
-This is one of the **most important screens in VoxCode**.
+This is one of the **most important screens in Jark**.
 
 ```text
 ┌──────────────────────────────────────────────────────────────┐
@@ -846,7 +846,7 @@ Exact file and line.
 
 ### Evidence
 
-What did VoxCode observe?
+What did Jark observe?
 
 ### Structural Evidence
 
@@ -908,7 +908,7 @@ Evidence
   Result: ✓ Confirmed
 ```
 
-This is a core VoxCode UX differentiator.
+This is a core Jark UX differentiator.
 
 ---
 
@@ -995,7 +995,7 @@ The user should be able to observe the process rather than seeing only:
 
 # 28. IDE-Like Code Workspace
 
-Because VoxCode supports **live agent modification**, the execution experience should resemble a lightweight developer IDE.
+Because Jark supports **live agent modification**, the execution experience should resemble a lightweight developer IDE.
 
 ```text
 ┌─────────────┬──────────────────────────┬─────────────────────┐
@@ -1203,7 +1203,7 @@ Actions:
 The final report should combine the complete engineering lifecycle.
 
 ```text
-VOXCODE ENGINEERING REPORT
+JARK ENGINEERING REPORT
 
 Repository
 payment-service
@@ -1281,7 +1281,7 @@ Each item can show:
 
 Voice remains **optional and secondary**.
 
-It should simply translate voice into the existing VoxCode workflow.
+It should simply translate voice into the existing Jark workflow.
 
 Example:
 
@@ -1351,7 +1351,7 @@ Notifications should be action-oriented.
 
 ```text
 ⚠ Approval required
-VoxCode prepared a remediation plan.
+Jark prepared a remediation plan.
 ```
 
 ```text
@@ -1473,7 +1473,7 @@ Example:
 ```text
 No investigations yet.
 
-Ask VoxCode about your repository
+Ask Jark about your repository
 or start an issue investigation.
 
 [ Start Investigation ]
@@ -1487,7 +1487,7 @@ Every error should answer:
 
 1. What happened?
 2. Why?
-3. What did VoxCode do?
+3. What did Jark do?
 4. What can the user do next?
 
 Example:
@@ -1498,7 +1498,7 @@ Build Failed
 Maven compilation failed in
 PaymentService.java.
 
-VoxCode did not accept the change.
+Jark did not accept the change.
 
 [ View Build Log ]
 [ View Diff ]
@@ -1616,7 +1616,7 @@ Verified
 
 # 48. Screen Priority for the One-Year Build
 
-Because VoxCode is a **one-year complete product**, implementation effort should be prioritized.
+Because Jark is a **one-year complete product**, implementation effort should be prioritized.
 
 ## 🔴 Tier 1 — Perfect These
 
@@ -1651,7 +1651,7 @@ Do **not** sacrifice the core agent experience to over-design secondary features
 
 ---
 
-# 49. What Makes VoxCode UX Different
+# 49. What Makes Jark UX Different
 
 A normal AI coding interface:
 
@@ -1665,7 +1665,7 @@ AI
 Code
 ```
 
-VoxCode:
+Jark:
 
 ```text
 User
@@ -1699,7 +1699,7 @@ The UI should make this difference immediately obvious.
 
 # 50. Final Visual Identity
 
-VoxCode should feel:
+Jark should feel:
 
 > **Dark + Technical + Premium + Minimal + Neon Green + Developer-native + Transparent + Trustworthy**
 
@@ -1709,7 +1709,7 @@ It should resemble a serious engineering environment rather than a consumer AI a
 
 # 51. Final Design Statement
 
-The final VoxCode UX should communicate:
+The final Jark UX should communicate:
 
 > **"Watch an engineering agent understand your Java/Spring repository, investigate an issue using structural and semantic evidence, propose a bounded change, let you approve it, modify the code live, and prove whether the resulting system actually works."**
 
@@ -1719,8 +1719,8 @@ That is the core experience.
 
 # 🔒 FINAL UI/UX LOCK
 
-**Product:** VoxCode
-**Full Name:** **VoxCode — Agentic Java/Spring Code Review & Remediation Agent**
+**Product:** Jark
+**Full Name:** **Jark — Agentic Java/Spring Code Review & Remediation Agent**
 
 ### Visual Identity
 
@@ -1740,6 +1740,6 @@ That is the core experience.
 
 ### Primary Design Goal
 
-> **Make VoxCode's engineering process visible, understandable, controllable, and verifiable without overwhelming the developer.**
+> **Make Jark's engineering process visible, understandable, controllable, and verifiable without overwhelming the developer.**
 
 This is the **final design document to lock alongside your PRD and Technical Design Document**.

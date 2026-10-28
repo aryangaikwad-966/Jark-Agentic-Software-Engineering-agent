@@ -2,16 +2,16 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: voxcode-mysql
+    container_name: jark-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-voxcode_db}
-      MYSQL_USER: ${MYSQL_USER:-voxcode_user}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-voxcode_pass}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-jark_db}
+      MYSQL_USER: ${MYSQL_USER:-jark_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-jark_pass}
     ports:
       - "3306:3306"
     volumes:
-      - voxcode-mysql-data:/var/lib/mysql
+      - jark-mysql-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
@@ -20,14 +20,14 @@ services:
 
   qdrant:
     image: qdrant/qdrant:latest
-    container_name: voxcode-qdrant
+    container_name: jark-qdrant
     ports:
       - "6333:6333"
       - "6334:6334"
     volumes:
-      - voxcode-qdrant-data:/qdrant/storage
+      - jark-qdrant-data:/qdrant/storage
     restart: unless-stopped
 
 volumes:
-  voxcode-mysql-data:
-  voxcode-qdrant-data:
+  jark-mysql-data:
+  jark-qdrant-data:

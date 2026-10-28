@@ -1,5 +1,5 @@
 #!/bin/bash
-# Setup environment for VoxCode project
+# Setup environment for Jark project
 
 # Try to find Java 21 specifically (required for project)
 if [ -d "/opt/homebrew/opt/openjdk@21" ]; then

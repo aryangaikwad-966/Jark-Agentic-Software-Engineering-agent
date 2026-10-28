@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/voxcode_db?allowPublicKeyRetrieval=true&useSSL=false
-    username: voxcode_user
-    password: voxcode_pass
+    url: jdbc:mysql://localhost:3306/jark_db?allowPublicKeyRetrieval=true&useSSL=false
+    username: jark_user
+    password: jark_pass
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -20,17 +20,17 @@ spring:
 logging:
   level:
     root: INFO
-    com.example.VoxCode: DEBUG
+    com.example.Jark: DEBUG
 
-voxcode:
+jark:
   workspace:
-    base-dir: ${VOXCODE_WORKSPACE_DIR:/tmp/voxcode/workspaces}
+    base-dir: ${JARK_WORKSPACE_DIR:/tmp/jark/workspaces}
   rag:
     top-k: 10
     max-context-tokens: 4000
     min-similarity-score: 0.0
     qdrant:
-      enabled: ${VOXCODE_QDRANT_ENABLED:false}
-      host: ${VOXCODE_QDRANT_HOST:localhost}
-      grpc-port: ${VOXCODE_QDRANT_GRPC_PORT:6334}
-      collection: ${VOXCODE_QDRANT_COLLECTION:voxcode_chunks}
+      enabled: ${JARK_QDRANT_ENABLED:false}
+      host: ${JARK_QDRANT_HOST:localhost}
+      grpc-port: ${JARK_QDRANT_GRPC_PORT:6334}
+      collection: ${JARK_QDRANT_COLLECTION:jark_chunks}
