@@ -2,9 +2,9 @@
 
 ## Current Project Status
 
-**Current Phase:** Phase 10 — MCP Tool Interface (resumed)
-**Current Task:** VXC-095 — Focused MCP Server (OPTIONAL)
-**Current Task Status:** IN PROGRESS
+**Current Phase:** Phase 25 — Frontend
+**Current Task:** VXC-240 — UI Foundation and Repository Overview
+**Current Task Status:** NOT STARTED
 
 ### Completed Tasks
 - [x] VXC-001 — Initialize backend repository
@@ -19,6 +19,7 @@
 - [x] VXC-070 — RAG Pipeline Setup
 - [x] VXC-080 — Retrieval Benchmarking
 - [x] VXC-090 — Core Agent Tools
+- [x] VXC-095 — Focused MCP Server (OPTIONAL)
 - [x] VXC-100 — Core Investigation Loop
 - [x] VXC-110 — Agent Benchmark
 - [x] VXC-120 — Structured Evidence Model
@@ -35,10 +36,9 @@
 - [x] VXC-230 — System Security Hardening
 
 ### In Progress Tasks
-- [/] VXC-095 — Focused MCP Server (OPTIONAL)
+- None
 
 ### Next Tasks
-- [ ] VXC-095 — Focused MCP Server (OPTIONAL)
 - [ ] VXC-240 — UI Foundation and Repository Overview
 - [ ] VXC-241 — Investigation and Trace UI
 - [ ] VXC-242 — Planning and Approval UI
@@ -49,7 +49,7 @@
 
 ### Overall Progress
 **24 / 28 phases completed** (Phases 0–24 complete)
-**26 / 34 VXC tasks completed** (76.5% complete)
+**27 / 34 VXC tasks completed** (79.4% complete)
 **Phase 0:** 2/2 tasks complete (100%)  
 **Phase 1:** 2/2 tasks complete (100%)  
 **Phase 2:** 1/1 tasks complete (100%)  
@@ -60,7 +60,7 @@
 **Phase 7:** 1/1 tasks complete (100%)
 **Phase 8:** 1/1 tasks complete (100%)
 **Phase 9:** 1/1 tasks complete (100%)
-**Phase 10:** 0/1 tasks complete (0%) — OPTIONAL, deferred
+**Phase 10:** 1/1 tasks complete (100%) — OPTIONAL
 **Phase 11:** 1/1 tasks complete (100%)
 **Phase 12:** 1/1 tasks complete (100%)
 **Phase 13:** 1/1 tasks complete (100%)
@@ -650,7 +650,7 @@ CI:
 
 ## Phase 10 — MCP Tool Interface
 
-### [ ] VXC-095 — Focused MCP Server (OPTIONAL)
+### [x] VXC-095 — Focused MCP Server (OPTIONAL)
 Priority: P2
 Phase: 10
 Dependencies: VXC-090
@@ -684,6 +684,19 @@ Tests:
 
 CI:
 - Included.
+
+**Implementation Summary:**
+- Expanded McpServerConfig to expose 12 focused MCP tools (up from 2)
+- Added 4 AST analysis tools: ast_find_class, ast_find_method, ast_find_annotation, ast_find_method_annotation
+- Added 4 dependency analysis tools: graph_find_dependencies, graph_find_dependents, graph_find_callers, graph_find_callees
+- Added 2 semantic retrieval tools: rag_search_semantic_context, rag_assemble_context
+- Kept existing 2 repository tools: repository_read_file, repository_list_files
+- Note: Build, test, and verification tools remain internal to Jark's approval-gated flows (not exposed via MCP)
+- All MCP tools enforce repository ownership authorization via authenticated context
+- Strict input schemas with repositoryId validation, required parameters, and no additional properties
+- Integrated with existing AstTools, GraphTools, RagTools, and RepositoryTools
+- Created 12 unit tests for MCP tool schema validation
+- All MCP tests passing successfully
 
 ---
 
